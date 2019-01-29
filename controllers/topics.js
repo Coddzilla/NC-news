@@ -17,7 +17,13 @@ const postTopics = (req, res, next) => {
   });
 };
 
+const sendArticleByTopic = (req, res, next) => {
+  const topicToFindArticle = req.params;
+  console.log(req.params);
+  getTopicByArticle().then(() => {});
+};
+
 // (module.exports = sendTopics), postTopics;
-module.exports = { sendTopics, postTopics };
+module.exports = { sendTopics, postTopics, sendArticleByTopic };
 //weird
 //post

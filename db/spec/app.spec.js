@@ -48,6 +48,11 @@ describe("/api", () => {
         });
     });
   });
+  describe("/api/topics/:topic/articles", () => {
+    it("GET request responds with a 200 and an article array of article objects with the correct keys", () => {
+      return request.get("/api/topics/mitch/articles").expect(200);
+    });
+  });
 });
 
 // it('respond with 201 created', function (done) {

@@ -1,13 +1,13 @@
 const connection = require("../db/connection");
 
-getTopics = () => {
+const getTopics = () => {
   return connection
     .select("*")
     .from("topics")
     .returning("*");
 };
 
-recieveTopics = postData => {
+const recieveTopics = postData => {
   return connection
     .insert(postData)
     .into("topics")
