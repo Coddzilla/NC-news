@@ -102,9 +102,9 @@ any extra functionality put into the utils folder to get out of the way...
 // require configuration 
 // invoke knex with configuration export out coonection 
 
-//have a describe for each url and an it block for each type of request/query
-
 ----- spec -------
+
+//have a describe for each url and an it block for each type of request/query
 use mocha hook beforeEach <--- executes before every it block
 
 
