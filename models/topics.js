@@ -8,7 +8,6 @@ getTopics = () => {
 };
 
 recieveTopics = postData => {
-  console.log("postData MODeL", postData);
   return connection
     .insert(postData)
     .into("topics")

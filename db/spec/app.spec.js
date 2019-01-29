@@ -40,10 +40,11 @@ describe("/api", () => {
         .send(toPost)
         .expect(201)
         .then(({ body }) => {
-          expect(body.topics).to.be.an("array");
-          expect(body.topics[0]).to.contain.keys("slug", "description");
-          // expect(body.topics).to.include(toPost);
-          // expect(body.topics).to.contain(toPost);
+          expect(body.topic).to.be.an("object");
+          expect(body.topic).to.eql({
+            slug: "lizzie",
+            description: "heyheyhey!"
+          });
         });
     });
   });
