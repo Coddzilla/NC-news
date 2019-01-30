@@ -79,11 +79,22 @@ describe("/api", () => {
     });
     it("GET request responds with a 200 and an article array of article objects in sorded order (default sort column as date", () => {
       return request
-        .get("/api/topics/mitch/articles?sort_column=title")
+        .get("/api/topics/mitch/articles?sort_by=title")
         .expect(200)
         .then(({ body }) => {
           // console.log(body.articles[0].title);
-          expect(body.articles[0].title).to.eql("A");
+          expect(body.articles[0].title).to.eql("Z");
+        });
+    });
+    it("GET request responds with a 200 and an article array of article objects in sorded order (default sort column as date)", () => {
+      return request
+        .get("/api/topics/mitch/articles")
+        .expect(200)
+        .then(({ body }) => {
+          // console.log(body.articles[0].title);
+          expect(body.articles[0].title).to.eql(
+            "Living in the shadow of a great man"
+          );
         });
     });
   });

@@ -14,25 +14,26 @@ const recieveTopics = postData => {
     .returning("*");
 };
 
-const getArticlesWithCommentCount = ({ limit = 10 }) => {
-  return (
-    connection
-      .select(
-        { author: "articles.username" },
-        "articles.title",
-        "articles.article_id",
-        "articles.votes",
-        "articles.created_at",
-        "articles.topic"
-      )
-      .count("comment.comment_id")
-      .as("comment_count")
-      .from("articles")
-      .leftJoin("comment", "articles.article_id", "comment.article_id")
-      .limit(limit)
-      // .orderBy(sort_column, "asc")
-      .groupBy("articles.article_id")
-  );
+const getArticlesWithCommentCount = ({
+  limit = 10,
+  sort_by = "created_at"
+}) => {
+  return connection
+    .select(
+      { author: "articles.username" },
+      "articles.title",
+      "articles.article_id",
+      "articles.votes",
+      "articles.created_at",
+      "articles.topic"
+    )
+    .count("comment.comment_id")
+    .as("comment_count")
+    .from("articles")
+    .leftJoin("comment", "articles.article_id", "comment.article_id")
+    .limit(limit)
+    .orderBy(sort_by, "desc")
+    .groupBy("articles.article_id");
 };
 
 const getTotalArticleCount = () => {
