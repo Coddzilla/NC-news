@@ -86,7 +86,7 @@ describe("/api", () => {
           expect(body.articles[0].title).to.eql("Z");
         });
     });
-    it("GET request responds with a 200 and an article array of article objects in sorded order (default sort column as date)", () => {
+    it("GET request responds with a 200 and an article array of article objects in sorded order (default sort column as date and sort order as descending)", () => {
       return request
         .get("/api/topics/mitch/articles")
         .expect(200)
@@ -95,6 +95,15 @@ describe("/api", () => {
           expect(body.articles[0].title).to.eql(
             "Living in the shadow of a great man"
           );
+        });
+    });
+    it("GET request responds with a 200 and an article array of article objects in sorded order when sort order is specified (default sort column as date and sort order as descending)", () => {
+      return request
+        .get("/api/topics/mitch/articles?order=asc")
+        .expect(200)
+        .then(({ body }) => {
+          // console.log(body.articles[0].title);
+          expect(body.articles[0].title).to.eql("Moustache");
         });
     });
   });

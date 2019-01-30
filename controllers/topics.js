@@ -35,6 +35,7 @@ const sendArticleCount = (req, res, next) => {
     getArticlesWithCommentCount(req.query)
   ])
     .then(([total_count, articles]) => {
+      console.log([total_count, articles]);
       res.send({ total_count, articles });
     })
     .catch(err => console.log(err) || next(err));

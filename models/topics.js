@@ -16,7 +16,8 @@ const recieveTopics = postData => {
 
 const getArticlesWithCommentCount = ({
   limit = 10,
-  sort_by = "created_at"
+  sort_by = "created_at",
+  order = "desc"
 }) => {
   return connection
     .select(
@@ -32,7 +33,7 @@ const getArticlesWithCommentCount = ({
     .from("articles")
     .leftJoin("comment", "articles.article_id", "comment.article_id")
     .limit(limit)
-    .orderBy(sort_by, "desc")
+    .orderBy(sort_by, order)
     .groupBy("articles.article_id");
 };
 
