@@ -1,3 +1,4 @@
+process.env.NODE_ENV = "test";
 const app = require("../../app");
 const request = require("supertest")(app);
 const { expect } = require("chai");
@@ -50,7 +51,40 @@ describe("/api", () => {
   });
   describe("/api/topics/:topic/articles", () => {
     it("GET request responds with a 200 and an article array of article objects with the correct keys", () => {
-      return request.get("/api/topics/mitch/articles").expect(200);
+      return request
+        .get("/api/topics/mitch/articles")
+        .expect(200)
+        .then(({ body }) => {
+          // console.log(body);
+          expect(body.total_count).to.eql(12);
+        });
+    });
+    it("GET request responds with a 200 and an article array of article objects with the correct keys, defaults to a limit of 10", () => {
+      return request
+        .get("/api/topics/mitch/articles")
+        .expect(200)
+        .then(({ body }) => {
+          // console.log(body);
+          expect(body.articles).to.have.length(10);
+        });
+    });
+    it("GET request responds with a 200 and an article array of article objects with the correct keys, with a limit when specified", () => {
+      return request
+        .get("/api/topics/mitch/articles?limit=5")
+        .expect(200)
+        .then(({ body }) => {
+          console.log("body!!!!", body);
+          expect(body.articles).to.have.length(5);
+        });
+    });
+    it("GET request responds with a 200 and an article array of article objects in sorded order (default sort column as date", () => {
+      return request
+        .get("/api/topics/mitch/articles?sort_column=title")
+        .expect(200)
+        .then(({ body }) => {
+          // console.log(body.articles[0].title);
+          expect(body.articles[0].title).to.eql("A");
+        });
     });
   });
 });

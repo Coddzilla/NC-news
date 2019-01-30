@@ -23,15 +23,14 @@ exports.seed = (connection, Promise) => {
         .returning("*");
     })
     .then(users => {
-      // console.log(users);
-      // console.log("ARTICLE-DATA BEFORE", articleData[0]);
-      console.log(typeof formattedArticles, "!!!!!!!!!!!!");
-      return connection.insert(formattedArticles(articleData)).into("articles");
-    })
-    .then(() => {
-      console.log("hihi");
       return connection
-        .insert(formattedComments(commentData, articleRef))
+        .insert(formattedArticles(articleData))
+        .into("articles")
+        .returning("*");
+    })
+    .then(articlesInDB => {
+      return connection
+        .insert(formattedComments(commentData, articleRef(articlesInDB)))
         .into("comment");
     });
 };

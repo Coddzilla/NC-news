@@ -1,8 +1,5 @@
 const { articleData, userData, commentData } = require("../data/index");
 
-// const  = users.username;
-// const articleRef = articles.article_id;
-
 const formattedArticles = articleData => {
   return articleData.map(({ created_by, created_at, ...restOfArticle }) => {
     return {
@@ -12,28 +9,12 @@ const formattedArticles = articleData => {
     };
   });
 };
-// const newComment = comments => {
-//   comments.map(comment => {});
-// };
-
-// createArticleRefObj = articleData => {
-//   let articleRef = {};
-//   articleData.forEach(article => (articleRef.title = articleData.article_id));
-//   return articleRef;
-// };
 
 const articleRef = articleData =>
   articleData.reduce((articleObj, articleCurr) => {
     articleObj[articleCurr.title] = articleCurr.article_id;
     return articleObj;
   }, {});
-
-// artticleRef - make new obj wth -
-// {
-//title: id
-//}
-
-// don't need userRef
 
 const formattedComments = (commentData, articleRef) => {
   const formattedComments = commentData.map(
@@ -42,11 +23,29 @@ const formattedComments = (commentData, articleRef) => {
       votes,
       username: created_by,
       created_at: new Date(created_at),
-      article_id: articleRef.belongs_to
+      article_id: articleRef[belongs_to]
     })
   );
   return formattedComments;
 };
-module.exports = { formattedArticles, formattedComments, articleRef };
 
-// {...restOfArticle, user:creaded_by}
+const alteredArticleObject = formattedArticles => {
+  const alteredArticlesForCommentCount = formattedArticles.map(
+    ({ username, title, article_id, votes, created_at, topic }) => ({
+      auther: username,
+      title,
+      article_id,
+      votes,
+      comment_count: "comment_count",
+      created_at,
+      topic
+    })
+  );
+  return alteredArticlesForCommentCount;
+};
+module.exports = {
+  formattedArticles,
+  formattedComments,
+  articleRef,
+  alteredArticleObject
+};

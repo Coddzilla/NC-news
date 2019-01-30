@@ -195,5 +195,27 @@ make a handle404 function and require this into the app.js to be used
 in 400 func - put an object called errorCodes = {
   '22P02' " invalid input syntax"
 }
-*/
 // const process.env.NODE_ENV = 'test';
+
+-----------------------------------------------------
+can test for limits
+
+test for the group by thing ---> 
+----query.sql-----
+//look at this by running psql -f query.sql use to help us build h
+
+\c testDatabase
+SELECT parties.party, parties.founded, COUNT(mps.mp_id) AS mp_count FROM parties 
+JOIN mps 
+ON parties.party = mps.party
+GROUP BY parties.party
+ORDER BY party DESC
+LIMIT 10
+
+sELECT artilces.topic, COUNT(articles.topic) FROM topics 
+JOIN articles 
+ON topics.slug =  articles.topic;
+
+can have multiple thinsg for order by- these are prioritised 
+
+*/
