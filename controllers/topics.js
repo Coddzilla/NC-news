@@ -1,10 +1,9 @@
-// const getTopics = require("../models/topics");
-// const recieveTopics = require("../models/topics");
 const {
   getTopics,
   recieveTopics,
   getArticlesWithCommentCount,
-  getTotalArticleCount
+  getTotalArticleCount,
+  recieveArticleByTopic
 } = require("../models/topics");
 
 const sendTopics = (req, res, next) => {
@@ -17,9 +16,11 @@ const sendTopics = (req, res, next) => {
 
 const postTopics = (req, res, next) => {
   const postData = req.body;
-  recieveTopics(postData).then(([topic]) => {
-    res.status(201).send({ topic });
-  });
+  recieveTopics(postData)
+    .then(([topic]) => {
+      res.status(201).send({ topic });
+    })
+    .catch(err => console.log(err) || next(err));
 };
 
 // const sendArticleByTopic = (req, res, next) => {
@@ -46,11 +47,21 @@ const sendArticleCount = (req, res, next) => {
   //   });
 };
 
+const postArtilceByTopic = (req, res, next) => {
+  const postData = req.body;
+  const topic = req.params;
+  recieveArticleByTopic(postData, topic)
+    .then(([article]) => {
+      console.log("POST ARTICLE", article);
+      res.status(201).send(article);
+    })
+    .catch(err => console.log(err) || next(err));
+};
+
 // (module.exports = sendTopics), postTopics;
 module.exports = {
   sendTopics,
   postTopics,
-  sendArticleCount
+  sendArticleCount,
+  postArtilceByTopic
 };
-//weird
-//post

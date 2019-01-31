@@ -1,3 +1,5 @@
+import { request } from "http";
+
 /*
 
 
@@ -218,4 +220,46 @@ ON topics.slug =  articles.topic;
 
 can have multiple thinsg for order by- these are prioritised 
 
+
+PATCH 
+
+test---
+
+it("status 200 can change the ... and respond with updated ....", () => {
+  request
+    .patch("/url")
+    .send({ party: "labour" })
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.mp).to.contain.kays("party", "constituency", "name");
+      expect(body.mp.name).to.equal("Johnathan Edwards");
+      expect(body.mp.party).to.equal("labour");
+    });
+});
+
+---- router ----
+change to update
+
+--- controller ---
+
+const updateMP = (req, res, next) => {
+  modifyMP(req.params.mp_id, req.body).then(([MP]) => {
+    res
+      .status(200)
+      .send({ MP })
+      .catch(next);
+  });
+};
+
+--- model ---
+
+const modifyMP = (mp_id, patchData) => {
+  return connection("MPs")
+    .where({ mp_id })
+    .update(patchData).returning('*');
+};
+
+
+
+TESTS FOR ERRORS!!!!
 */

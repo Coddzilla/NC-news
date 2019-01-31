@@ -2,18 +2,13 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const apiRouter = require("./routes/api");
+const { handle400, handle500, handle404 } = require("./errorHandling");
 
 app.use(bodyParser.json());
 app.use("/api", apiRouter);
 
-app.use((err, req, res, next) => {
-  if (err.code) {
-    res.status(err.code).send({ msg: `Sorry there was a ${err.code} error!` });
-  } else {
-    res
-      .status(500)
-      .send({ msg: `Sorry there was a server error! ${err.code}` });
-  }
-});
+app.use(handle400);
+app.use(handle404);
+app.use(handle500);
 
 module.exports = app;

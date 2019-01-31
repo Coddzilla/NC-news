@@ -2,7 +2,8 @@ const topicsRouter = require("express").Router();
 const {
   sendTopics,
   postTopics,
-  sendArticleCount
+  sendArticleCount,
+  postArtilceByTopic
 } = require("../controllers/topics");
 
 topicsRouter
@@ -10,6 +11,9 @@ topicsRouter
   .get(sendTopics)
   .post(postTopics);
 
-topicsRouter.route("/:topic/articles").get(sendArticleCount);
+topicsRouter
+  .route("/:topic/articles")
+  .get(sendArticleCount)
+  .post(postArtilceByTopic);
 
 module.exports = topicsRouter;

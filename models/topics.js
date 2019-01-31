@@ -17,7 +17,8 @@ const recieveTopics = postData => {
 const getArticlesWithCommentCount = ({
   limit = 10,
   sort_by = "created_at",
-  order = "desc"
+  order = "desc",
+  p = 1
 }) => {
   return connection
     .select(
@@ -33,6 +34,7 @@ const getArticlesWithCommentCount = ({
     .from("articles")
     .leftJoin("comment", "articles.article_id", "comment.article_id")
     .limit(limit)
+    .offset((parseInt(p) - 1) * limit)
     .orderBy(sort_by, order)
     .groupBy("articles.article_id");
 };
@@ -46,9 +48,20 @@ const getTotalArticleCount = () => {
     });
 };
 
+const recieveArticleByTopic = (postData, topic) => {
+  postData.topic = topic.topic;
+  console.log(postData);
+  return connection
+    .insert(postData)
+    .into("articles")
+    .returning("*");
+  // .where("topic", "=", topic);
+};
+//how to put in data from the req.params and the req.body
 module.exports = {
   getTopics,
   recieveTopics,
   getArticlesWithCommentCount,
-  getTotalArticleCount
+  getTotalArticleCount,
+  recieveArticleByTopic
 };
