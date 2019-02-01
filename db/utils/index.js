@@ -32,7 +32,7 @@ const formattedComments = (commentData, articleRef) => {
 const alteredArticleObject = formattedArticles => {
   const alteredArticlesForCommentCount = formattedArticles.map(
     ({ username, title, article_id, votes, created_at, topic }) => ({
-      auther: username,
+      author: username,
       title,
       article_id,
       votes,

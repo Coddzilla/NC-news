@@ -96,6 +96,7 @@ describe("/api", () => {
             expect(body.articles[0].title).to.eql("Z");
           });
       });
+      ////////
       it("GET request responds with a 200 and an article array of article objects in sorded order (default sort column as date and sort order as descending)", () => {
         return request
           .get("/api/topics/mitch/articles")
@@ -275,7 +276,7 @@ describe("/api", () => {
               ); //why is the model not changing count to comment_count?
             });
         });
-        it.only("gets 404 an article when an article id is specified", () => {
+        it("gets 404 an article when an article id is specified", () => {
           return request
             .get("/api/articles/99999999")
             .expect(404)
@@ -285,8 +286,185 @@ describe("/api", () => {
               });
             });
         });
+        it("status 200 can change the votes and respond with updated article", () => {
+          return request
+            .patch("/api/articles/3")
+            .send({ inc_votes: 4 })
+            .expect(200)
+            .then(({ body }) => {
+              console.log(body, "body");
+              expect(body.article).to.have.all.keys(
+                "article_id",
+                "username",
+                "title",
+                "votes",
+                "body",
+                "created_at",
+                "topic"
+              );
+              expect(body.article.votes).to.eql(4);
+            });
+        });
+        it("status 200 can decrement the votes and respond with updated article", () => {
+          return request
+            .patch("/api/articles/3")
+            .send({ inc_votes: -7 })
+            .expect(200)
+            .then(({ body }) => {
+              console.log(body, "body");
+              expect(body.article).to.have.all.keys(
+                "article_id",
+                "username",
+                "title",
+                "votes",
+                "body",
+                "created_at",
+                "topic"
+              );
+              expect(body.article.votes).to.eql(-7);
+            });
+        });
+        xit("DELETE ", () => {});
+      });
+      describe("/api/articles/:article_id/comments", () => {
+        it("GETs the comments for an article with a specific article_id, status 200", () => {
+          return request
+            .get("/api/articles/1/comments")
+            .expect(200)
+            .then(({ body }) => {
+              console.log("body", body);
+              expect(body.comments[0]).to.have.all.keys(
+                "comment_id",
+                "votes",
+                "created_at",
+                "author",
+                "body"
+              );
+            });
+        });
+        it("GETs the comments for an article with a specific article_id and a default limit of 10, status 200", () => {
+          return request
+            .get("/api/articles/1/comments")
+            .expect(200)
+            .then(({ body }) => {
+              console.log("body", body);
+              expect(body.comments).to.have.length(10);
+            });
+        });
+        it("GETs the comments for an article with a specific article_id and a specified limit, status 200", () => {
+          return request
+            .get("/api/articles/1/comments?limit=0")
+            .expect(200)
+            .then(({ body }) => {
+              console.log("body", body);
+              expect(body.comments).to.have.length(0);
+            });
+        });
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/1/comments")
+            .expect(200)
+            .then(({ body }) => {
+              console.log("body", body);
+              expect(body.comments[0].author).to.eql("butter_bridge");
+            });
+        });
+        it("GETs the comments for an article with a specific article_id, articles sorted by column when specified (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/1/comments?sort_by=comment_id")
+            .expect(200)
+            .then(({ body }) => {
+              console.log("body", body);
+              expect(body.comments[0].body).to.eql(
+                "This morning, I showered for nine minutes."
+              );
+            });
+        });
+        it("GETs the comments for an article with a specific article_id, articles sorted by column when specified and sort order specified (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/1/comments?sort_by=comment_id&order=asc")
+            .expect(200)
+            .then(({ body }) => {
+              console.log("body", body);
+              expect(body.comments[0].body).to.eql(
+                "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky."
+              );
+            });
+        });
+        it("GETs the comments for an article with a specific article_id, articles sorted by column when specified and sort order specified (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/1/comments?p=2")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.comments).to.have.length(3);
+            });
+        });
+      });
+      describe("/api/articles/:article_id/comments/:comment_id", () => {
+        xit("PATCH request body accepts an object in the form { inc_votes: newVote } with a status 200", () => {
+          return request
+            .patch("/api/articles/1/comments/1")
+            .send({ inc_votes: 4 })
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.comments[0].votes).to.eql(4);
+            });
+        });
+        it("DELETE request body accepts an object in the form { inc_votes: newVote } with a status 200", () => {});
+      });
+      describe("/api/users", () => {
+        it("GETs users and responds with 200", () => {
+          return request
+            .get("/api/users")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.users[0]).to.have.all.keys(
+                "avatar_url",
+                "name",
+                "username"
+              );
+            });
+        });
+        it("request body accepts an object containing a username , avatar_url and a name property responds with the posted user responds with 201", () => {
+          const toPost = {
+            username: "coddzilla",
+            name: "lizzie",
+            avatar_url: "https://www.yoyoyo.com"
+          };
+          return request
+            .post("/api/users")
+            .send(toPost)
+            .expect(201)
+            .then(({ body }) => {
+              expect(body.user).to.eql({
+                username: "coddzilla",
+                name: "lizzie",
+                avatar_url: "https://www.yoyoyo.com"
+              });
+            });
+        });
+      });
+      describe("/api/users/:username", () => {
+        it.only("get a user when a username is specified", () => {
+          return request
+            .get("/api/users/butter_bridge")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.user.name).to.eql("jonny");
+            });
+        });
       });
     });
-    //write test for page...what the frig is this???
   });
 });
+
+// it("gets 404 an article when an article id is specified", () => {
+//   return request
+//     .get("/api/articles/99999999")
+//     .expect(404)
+//     .then(({ body }) => {
+//       expect(body).to.eql({
+//         msg: "sorry, that was not found"
+//       });
+//     });
+// });
