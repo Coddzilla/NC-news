@@ -4,15 +4,15 @@ const handle400 = (err, req, res, next) => {
     "23505": "this key already exists, use a unique key",
     "42703": "That sort order cannot be implimented"
   };
-  if (codes[err.code]) {
-    res.status(400).send({ msg: codes[err.code] });
+  if (codes[err.code] || err.status === 400) {
+    res.status(400).send({ msg: "sorry there was a 400, bad request!" });
   } else {
     next(err);
   }
 };
 
 const handle404 = (err, req, res, next) => {
-  if ((err.status = 404)) {
+  if ((err.status = 404 || err.status === 404)) {
     res.status(404).send({ msg: "sorry, that was not found" });
   }
 };

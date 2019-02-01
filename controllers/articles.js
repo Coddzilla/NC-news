@@ -7,6 +7,8 @@ const {
   updateArticleComments
 } = require("../models/articles");
 
+const { getTotalArticleCount } = require("../models/topics");
+
 const fetchArticles = (req, res, next) => {
   console.log(
     "REQ.BODY: --->",

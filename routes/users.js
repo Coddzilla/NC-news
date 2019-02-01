@@ -2,7 +2,8 @@ const usersRouter = require("express").Router();
 const {
   sendUsers,
   postUser,
-  getUserByUsername
+  getUserByUsername,
+  getArticlesByUsername
 } = require("../controllers/users");
 
 usersRouter
@@ -11,6 +12,8 @@ usersRouter
   .post(postUser);
 
 usersRouter.route("/:username").get(getUserByUsername);
+
+usersRouter.route("/:username/articles").get(getArticlesByUsername);
 
 // usersRouter
 //   .route("/:topic/articles")

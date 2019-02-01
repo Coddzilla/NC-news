@@ -229,7 +229,7 @@ describe("/api", () => {
           .get("/api/articles?sort_by=cdbu")
           .expect(400)
           .then(({ body }) => {
-            expect(body.msg).to.eql("That sort order cannot be implimented");
+            expect(body.msg).to.eql("sorry there was a 400, bad request!");
           });
       });
       it("GETs a total_count property and article array which is sorted to a specific sort order when specified (default sorted by descending)", () => {
@@ -324,7 +324,12 @@ describe("/api", () => {
               expect(body.article.votes).to.eql(-7);
             });
         });
-        xit("DELETE ", () => {});
+        xit("DELETE yet to be written...", () => {
+          return request
+            .delete("/api/articles/:article_id")
+            .expect(204)
+            .then(); //do I need a then block?
+        });
       });
       describe("/api/articles/:article_id/comments", () => {
         it("GETs the comments for an article with a specific article_id, status 200", () => {
@@ -410,7 +415,12 @@ describe("/api", () => {
               expect(body.comments[0].votes).to.eql(4);
             });
         });
-        it("DELETE request body accepts an object in the form { inc_votes: newVote } with a status 200", () => {});
+        xit("DELETE request body accepts an object in the form { inc_votes: newVote } with a status 200", () => {
+          return request
+            .delete("/api/articles/:article_id/comments/:comment_id")
+            .expect(204)
+            .then(); //do I need a then block?
+        });
       });
       describe("/api/users", () => {
         it("GETs users and responds with 200", () => {
@@ -445,13 +455,165 @@ describe("/api", () => {
         });
       });
       describe("/api/users/:username", () => {
-        it.only("get a user when a username is specified", () => {
+        it("get a user when a username is specified", () => {
           return request
             .get("/api/users/butter_bridge")
             .expect(200)
             .then(({ body }) => {
               expect(body.user.name).to.eql("jonny");
             });
+        });
+      });
+      describe("/api/users/:username/articles", () => {
+        it("get the articles when a username is specified, status 200 and a default limit of 10", () => {
+          return request
+            .get("/api/users/butter_bridge/articles")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles[0]).to.have.all.keys(
+                "author",
+                "title",
+                "article_id",
+                "votes",
+                "created_at",
+                "topic",
+                "count"
+              );
+              expect(body.articles).to.have.length(3);
+              expect(body.articles[1].author).to.eql("butter_bridge");
+            });
+        });
+        it("get the articles when a username is specified and a limit is specified, status 200", () => {
+          return request
+            .get("/api/users/butter_bridge/articles?limit=2")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles[0]).to.have.all.keys(
+                "author",
+                "title",
+                "article_id",
+                "votes",
+                "created_at",
+                "topic",
+                "count"
+              );
+              expect(body.articles).to.have.length(2);
+              expect(body.articles[1].author).to.eql("butter_bridge");
+            });
+        });
+        it("get the articles when a username is specified, status 200 and default sorted by date and default sort order as descending", () => {
+          return request
+            .get("/api/users/butter_bridge/articles")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles[0]).to.have.all.keys(
+                "author",
+                "title",
+                "article_id",
+                "votes",
+                "created_at",
+                "topic",
+                "count"
+              );
+              expect(body.articles[0].title).to.eql(
+                "Living in the shadow of a great man"
+              );
+            });
+        });
+        it("get the articles when a username is specified, status 200 and default sorted by date and default sort order as descending", () => {
+          return request
+            .get("/api/users/butter_bridge/articles?sort_by=title")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles[0]).to.have.all.keys(
+                "author",
+                "title",
+                "article_id",
+                "votes",
+                "created_at",
+                "topic",
+                "count"
+              );
+              expect(body.articles[0].title).to.eql(
+                "They're not exactly dogs, are they?"
+              );
+            });
+        });
+        it("get the articles when a username is specified, status 200 and sorted by column when specified and sort order when specified", () => {
+          return request
+            .get(
+              "/api/users/butter_bridge/articles?sort_by=article_id&order=asc"
+            )
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles[0]).to.have.all.keys(
+                "author",
+                "title",
+                "article_id",
+                "votes",
+                "created_at",
+                "topic",
+                "count"
+              );
+              expect(body.articles[0].title).to.eql(
+                "Living in the shadow of a great man"
+              );
+            });
+        });
+        it("get the articles when a username is specified, status 200, sorted by column when specified, sort order when specified and is split into pages when page number is specified", () => {
+          return request
+            .get(
+              "/api/users/butter_bridge/articles?sort_by=article_id&order=asc&limit=2&p=2"
+            )
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles[0]).to.have.all.keys(
+                "author",
+                "title",
+                "article_id",
+                "votes",
+                "created_at",
+                "topic",
+                "count"
+              );
+              expect(body.articles).to.have.length(1);
+            });
+        });
+        it("gets a 404 not found when the user does not exist", () => {
+          return request
+            .get("/api/users/butter_bride/articles")
+            .expect(404)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry, that was not found");
+            });
+        });
+        it("gets a 404, not found when the user is in the wrong format", () => {
+          return request
+            .get("/api/users/4/articles")
+            .expect(404)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry, that was not found");
+            });
+        });
+      });
+      describe("/api", () => {
+        it("GETs a JSON describing all of the available end points", () => {
+          return request
+            .get("/api")
+            .expect(200)
+            .then(({ body }) =>
+              expect(body.apiObject).to.have.all.keys(
+                "/api/topics",
+                "/api/topics/:topic/articles",
+                "/api/articles",
+                "/api/articles/:article_id",
+                "/api/articles/:article_id/comments",
+                "/api/articles/:article_id/comments/:comment_id",
+                "/api/users",
+                "/api/users/:username",
+                "/api/users/:username/articles"
+              )
+            );
         });
       });
     });
