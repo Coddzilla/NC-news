@@ -31,7 +31,7 @@ describe("/api", () => {
           expect(body.topics[0]).to.contain.keys("slug", "description");
         });
     });
-    it("POST request responds with 201 and body accepts a objecy containing slug and description ", () => {
+    it("POST request responds with 201 and body accepts an object containing a slug and a description ", () => {
       const toPost = {
         slug: "lizzie",
         description: "heyheyhey!"
@@ -63,7 +63,7 @@ describe("/api", () => {
         });
     });
     describe("/api/topics/:topic/articles", () => {
-      it("GET request responds with a 200 and an article array of article objects with the correct keys", () => {
+      it("GET request responds with a 200 and an article array of article objects", () => {
         return request
           .get("/api/topics/mitch/articles")
           .expect(200)
@@ -71,7 +71,7 @@ describe("/api", () => {
             expect(body.total_count).to.eql(12);
           });
       });
-      it("GET request responds with a 200 and an article array of article objects with the correct keys, defaults to a limit of 10", () => {
+      it("GET request responds with a 200 and an article array of article objects, defaults to a limit of 10", () => {
         return request
           .get("/api/topics/mitch/articles")
           .expect(200)
@@ -85,9 +85,28 @@ describe("/api", () => {
           .expect(200)
           .then(({ body }) => {
             expect(body.articles).to.have.length(5);
+            expect(body.articles[0]).to.have.all.keys(
+              "author",
+              "title",
+              "article_id",
+              "votes",
+              "created_at",
+              "topic",
+              "count"
+            );
           });
       });
-      it("GET request responds with a 200 and an article array of article objects in sorded order (default sort column as date", () => {
+      it("GET request responds with a 200 and an article array of article objects in sorded order  (default sort column as date) ", () => {
+        return request
+          .get("/api/topics/mitch/articles")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles[0].title).to.eql(
+              "Living in the shadow of a great man"
+            );
+          });
+      });
+      it("GET request responds with a 200 and an article array of article objects in sorded order when the sort column in specified (default sort column as date) ", () => {
         return request
           .get("/api/topics/mitch/articles?sort_by=title")
           .expect(200)
@@ -120,11 +139,20 @@ describe("/api", () => {
           .expect(200)
           .then(({ body }) => {
             expect(body.total_count).to.eql(12);
+            expect(body.articles[0]).to.have.all.keys(
+              "author",
+              "title",
+              "article_id",
+              "votes",
+              "created_at",
+              "topic",
+              "count"
+            );
           });
       });
     });
     describe("/api/topics/:topic/articles", () => {
-      it("POST - request body accepts an object containing a title , body and a username property responds with the posted article ", () => {
+      it("POST - request body accepts an object containing a title , body and a username property responds with the posted article and a 201 status", () => {
         const toPost = {
           title: "yoyoyo",
           body: "body of yoyoyo",
@@ -138,7 +166,7 @@ describe("/api", () => {
             expect(body.title).to.eql("yoyoyo");
           });
       });
-      it("POST - request body accepts an object containing a title , body and a username property responds with the posted article ", () => {
+      it("POST - responds with a 400 bad request if the username does not exists", () => {
         const toPost = {
           title: "yoyoyo",
           body: "body of yoyoyo",
@@ -160,9 +188,11 @@ describe("/api", () => {
           .expect(200)
           .then(({ body }) => {
             expect(body).to.have.all.keys("total_count", "articles");
+            expect(body.articles).to.be.an("array");
+            expect(body.articles[0]).to.be.an("object");
           });
       });
-      it("GETs a total_count property, displaying the total number of articles and an articles array of article objects", () => {
+      it("GETs a total_count property, displaying the total number of articles and an articles array of article objects with the correct keys", () => {
         return request
           .get("/api/articles")
           .expect(200)
@@ -221,7 +251,8 @@ describe("/api", () => {
             expect(body.articles[0].title).to.eql("Moustache");
           });
       });
-      it("GETs a total_count property and article array which is sorted to a specific sort order when specified (default sorted by descending)", () => {
+      //should this be a 404?
+      it("GETs sends a 400 bad request when the sort column does not exist", () => {
         return request
           .get("/api/articles?sort_by=cdbu")
           .expect(400)
@@ -229,7 +260,7 @@ describe("/api", () => {
             expect(body.msg).to.eql("sorry there was a 400, bad request!");
           });
       });
-      it("GETs a total_count property and article array which is sorted to a specific sort order when specified (default sorted by descending)", () => {
+      it("GETs a total_count property and article array which is split into pages, gives the correct amount of information for each page number (default limit of 10)", () => {
         return request
           .get("/api/articles?p=2")
           .expect(200)
@@ -237,7 +268,7 @@ describe("/api", () => {
             expect(body.articles).to.have.length(2);
           });
       });
-      it("GETs a total_count property and article array which is sorted to a specific sort order when specified (default sorted by descending)", () => {
+      it("GETs a total_count property and article array which is split into pages, gives the correct amount of information for each page number when a limit is specified", () => {
         return request
           .get("/api/articles?p=2&limit=7")
           .expect(200)
@@ -269,9 +300,10 @@ describe("/api", () => {
                 "created_at",
                 "topic"
               );
+              expect(body.article.article_id).to.eql(2);
             });
         });
-        it("gets 404 an article when an article id is specified", () => {
+        it("gets 404 when an article when an non-existant article id is specified", () => {
           return request
             .get("/api/articles/99999999")
             .expect(404)
@@ -380,7 +412,7 @@ describe("/api", () => {
               );
             });
         });
-        it("GETs the comments for an article with a specific article_id, articles sorted by column when specified and sort order specified (default to sort by date) status 200", () => {
+        it("GETs the comments for an article with a specific article_id, and gives the correct amount of responses for a specific page number (limit defaults to 10) status 200", () => {
           return request
             .get("/api/articles/1/comments?p=2")
             .expect(200)
@@ -388,9 +420,17 @@ describe("/api", () => {
               expect(body.comments).to.have.length(3);
             });
         });
+        it("GETs the comments for an article with a specific article_id, and gives the correct amount of responses for a specific page number and a specific limit (limit defaults to 10) status 200", () => {
+          return request
+            .get("/api/articles/1/comments?p=2&limit=2")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.comments).to.have.length(2);
+            });
+        });
       });
       describe("/api/articles/:article_id/comments/:comment_id", () => {
-        it("PATCH request body accepts an object in the form { inc_votes: newVote } with a status 200", () => {
+        it("PATCH request body accepts an object in the form { inc_votes: newVote } with a status 200 and increments the votes", () => {
           return request
             .patch("/api/articles/1/comments/1")
             .send({ inc_votes: 4 })
@@ -404,7 +444,7 @@ describe("/api", () => {
         });
       });
       describe("/api/users", () => {
-        it("GETs users and responds with 200", () => {
+        it("GETs users and responds with 200 and an array of user objects", () => {
           return request
             .get("/api/users")
             .expect(200)
@@ -416,7 +456,7 @@ describe("/api", () => {
               );
             });
         });
-        it("request body accepts an object containing a username , avatar_url and a name property responds with the posted user responds with 201", () => {
+        it("POST request - body accepts an object containing a username , avatar_url and a name property responds with the posted user responds with 201", () => {
           const toPost = {
             username: "coddzilla",
             name: "lizzie",
@@ -501,7 +541,7 @@ describe("/api", () => {
               );
             });
         });
-        it("get the articles when a username is specified, status 200 and default sorted by date and default sort order as descending", () => {
+        it("get the articles when a username is specified, status 200 and sorts by title when specified (default sorted by date) and default sort order as descending", () => {
           return request
             .get("/api/users/butter_bridge/articles?sort_by=title")
             .expect(200)

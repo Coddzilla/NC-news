@@ -262,4 +262,12 @@ const modifyMP = (mp_id, patchData) => {
 
 
 TESTS FOR ERRORS!!!!
+
+
+
+To do better:
+
+- I have made more tests for errors - need to do more
+- I've changed the it comments for tests since a lot of them were repeated and didnt realise
+- line 453 in spec - do I need to stata that it's an object/array even thoug it'd obvious
 */
