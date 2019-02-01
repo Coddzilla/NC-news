@@ -28,13 +28,11 @@ const getUserByUsername = (req, res, next) => {
     .catch(err => console.log(err) || next(err));
 };
 
-// GET /api/users/:username/articles
 const getArticlesByUsername = (req, res, next) => {
   Promise.all([
     getTotalArticleCount(req.params, req.query),
     fetchArticlesByUsername(req.params, req.query)
   ])
-    //haven't written getArticleCount
     .then(([total_count, articles]) => {
       if (articles.length === 0) {
         return Promise.reject({

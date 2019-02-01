@@ -44,20 +44,18 @@ const getTotalArticleCount = () => {
     .count("article_id")
     .then(([{ count }]) => {
       return +count;
-      //the + turns the numeric string into a number
     });
 };
 
 const recieveArticleByTopic = (postData, topic) => {
   postData.topic = topic.topic;
-  console.log(postData);
   return connection
     .insert(postData)
     .into("articles")
     .returning("*");
   // .where("topic", "=", topic);
 };
-//how to put in data from the req.params and the req.body
+
 module.exports = {
   getTopics,
   recieveTopics,

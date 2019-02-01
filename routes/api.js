@@ -9,7 +9,6 @@ apiRouter.use("/articles", articleRouter);
 apiRouter.use("/users", usersRouter);
 
 apiRouter.use("/", (req, res, next) => {
-  console.log(apiObject);
   res.status(200).send(apiObject);
 });
 

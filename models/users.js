@@ -12,8 +12,6 @@ const addUser = postData => {
 };
 
 const fetchUserByUsername = ({ username }) => {
-  console.log("got to model");
-  console.log(username);
   return connection
     .select("*")
     .from("users")
@@ -21,7 +19,6 @@ const fetchUserByUsername = ({ username }) => {
 };
 
 const getTotalArticleCount = ({ username }, { limit = 10 }) => {
-  console.log(username, "<--- req.params in model for get");
   return connection("articles")
     .count("article_id")
     .where("username", "=", username)
@@ -30,18 +27,10 @@ const getTotalArticleCount = ({ username }, { limit = 10 }) => {
     });
 };
 
-// username as author
-// title
-// article_id
-// votes
-// comment_count - how?
-//   created_at
-// topic
 const fetchArticlesByUsername = (
   { username },
   { limit = 10, sort_by = "created_at", order = "desc", p = 1 }
 ) => {
-  console.log(username, "<--- req.params in model for fetch");
   return connection
     .select(
       { author: "articles.username" },

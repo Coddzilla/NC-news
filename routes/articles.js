@@ -4,7 +4,9 @@ const {
   getArticleByArticleId,
   updateArticles,
   getArticleCommentsByArticleId,
-  patchArticleComments
+  patchArticleComments,
+  deleteArticleByArticleId,
+  deleteCommentByCommentId
 } = require("../controllers/articles");
 
 articleRouter.route("/").get(fetchArticles);
@@ -12,13 +14,14 @@ articleRouter.route("/").get(fetchArticles);
 articleRouter
   .route("/:article_id")
   .get(getArticleByArticleId)
-  .patch(updateArticles);
-//.delete(deleteArticleById)
+  .patch(updateArticles)
+  .delete(deleteArticleByArticleId);
 
 articleRouter.route("/:article_id/comments").get(getArticleCommentsByArticleId);
 
 articleRouter
-  .route("/api/articles/:article_id/comments/:comment_id")
-  .patch(patchArticleComments);
+  .route("/:article_id/comments/:comment_id")
+  .patch(patchArticleComments)
+  .delete(deleteCommentByCommentId);
 
 module.exports = articleRouter;

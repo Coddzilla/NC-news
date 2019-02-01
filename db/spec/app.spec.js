@@ -84,7 +84,6 @@ describe("/api", () => {
           .get("/api/topics/mitch/articles?limit=5")
           .expect(200)
           .then(({ body }) => {
-            console.log("body!!!!", body);
             expect(body.articles).to.have.length(5);
           });
       });
@@ -96,13 +95,12 @@ describe("/api", () => {
             expect(body.articles[0].title).to.eql("Z");
           });
       });
-      ////////
+
       it("GET request responds with a 200 and an article array of article objects in sorded order (default sort column as date and sort order as descending)", () => {
         return request
           .get("/api/topics/mitch/articles")
           .expect(200)
           .then(({ body }) => {
-            console.log(body);
             expect(body.articles[0].title).to.eql(
               "Living in the shadow of a great man"
             );
@@ -169,7 +167,6 @@ describe("/api", () => {
           .get("/api/articles")
           .expect(200)
           .then(({ body }) => {
-            console.log("!!!!!", body.articles[0]);
             expect(body.articles[0]).to.have.all.keys(
               "author",
               "title",
@@ -237,7 +234,6 @@ describe("/api", () => {
           .get("/api/articles?p=2")
           .expect(200)
           .then(({ body }) => {
-            console.log(body);
             expect(body.articles).to.have.length(2);
           });
       });
@@ -246,7 +242,6 @@ describe("/api", () => {
           .get("/api/articles?p=2&limit=7")
           .expect(200)
           .then(({ body }) => {
-            console.log(body);
             expect(body.articles).to.have.length(5);
           });
       });
@@ -273,7 +268,7 @@ describe("/api", () => {
                 "count",
                 "created_at",
                 "topic"
-              ); //why is the model not changing count to comment_count?
+              );
             });
         });
         it("gets 404 an article when an article id is specified", () => {
@@ -292,7 +287,6 @@ describe("/api", () => {
             .send({ inc_votes: 4 })
             .expect(200)
             .then(({ body }) => {
-              console.log(body, "body");
               expect(body.article).to.have.all.keys(
                 "article_id",
                 "username",
@@ -311,7 +305,6 @@ describe("/api", () => {
             .send({ inc_votes: -7 })
             .expect(200)
             .then(({ body }) => {
-              console.log(body, "body");
               expect(body.article).to.have.all.keys(
                 "article_id",
                 "username",
@@ -324,11 +317,8 @@ describe("/api", () => {
               expect(body.article.votes).to.eql(-7);
             });
         });
-        xit("DELETE yet to be written...", () => {
-          return request
-            .delete("/api/articles/:article_id")
-            .expect(204)
-            .then(); //do I need a then block?
+        it("DELETE's an article by article id, status 204'", () => {
+          return request.delete("/api/articles/2").expect(204);
         });
       });
       describe("/api/articles/:article_id/comments", () => {
@@ -337,7 +327,6 @@ describe("/api", () => {
             .get("/api/articles/1/comments")
             .expect(200)
             .then(({ body }) => {
-              console.log("body", body);
               expect(body.comments[0]).to.have.all.keys(
                 "comment_id",
                 "votes",
@@ -352,7 +341,6 @@ describe("/api", () => {
             .get("/api/articles/1/comments")
             .expect(200)
             .then(({ body }) => {
-              console.log("body", body);
               expect(body.comments).to.have.length(10);
             });
         });
@@ -361,7 +349,6 @@ describe("/api", () => {
             .get("/api/articles/1/comments?limit=0")
             .expect(200)
             .then(({ body }) => {
-              console.log("body", body);
               expect(body.comments).to.have.length(0);
             });
         });
@@ -370,7 +357,6 @@ describe("/api", () => {
             .get("/api/articles/1/comments")
             .expect(200)
             .then(({ body }) => {
-              console.log("body", body);
               expect(body.comments[0].author).to.eql("butter_bridge");
             });
         });
@@ -379,7 +365,6 @@ describe("/api", () => {
             .get("/api/articles/1/comments?sort_by=comment_id")
             .expect(200)
             .then(({ body }) => {
-              console.log("body", body);
               expect(body.comments[0].body).to.eql(
                 "This morning, I showered for nine minutes."
               );
@@ -390,7 +375,6 @@ describe("/api", () => {
             .get("/api/articles/1/comments?sort_by=comment_id&order=asc")
             .expect(200)
             .then(({ body }) => {
-              console.log("body", body);
               expect(body.comments[0].body).to.eql(
                 "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky."
               );
@@ -406,20 +390,17 @@ describe("/api", () => {
         });
       });
       describe("/api/articles/:article_id/comments/:comment_id", () => {
-        xit("PATCH request body accepts an object in the form { inc_votes: newVote } with a status 200", () => {
+        it("PATCH request body accepts an object in the form { inc_votes: newVote } with a status 200", () => {
           return request
             .patch("/api/articles/1/comments/1")
             .send({ inc_votes: 4 })
             .expect(200)
             .then(({ body }) => {
-              expect(body.comments[0].votes).to.eql(4);
+              expect(body.comment.votes).to.eql(20);
             });
         });
-        xit("DELETE request body accepts an object in the form { inc_votes: newVote } with a status 200", () => {
-          return request
-            .delete("/api/articles/:article_id/comments/:comment_id")
-            .expect(204)
-            .then(); //do I need a then block?
+        it("DELETEs a comment by comment id, status 204", () => {
+          return request.delete("/api/articles/2/comments/3").expect(204);
         });
       });
       describe("/api/users", () => {
@@ -619,14 +600,3 @@ describe("/api", () => {
     });
   });
 });
-
-// it("gets 404 an article when an article id is specified", () => {
-//   return request
-//     .get("/api/articles/99999999")
-//     .expect(404)
-//     .then(({ body }) => {
-//       expect(body).to.eql({
-//         msg: "sorry, that was not found"
-//       });
-//     });
-// });

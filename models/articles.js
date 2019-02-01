@@ -5,17 +5,14 @@ const getArticleCount = () => {
     .count("article_id")
     .then(([{ count }]) => {
       return +count;
-      //the + turns the numeric string into a number
     });
 };
-//how to change the count so that it responds to the getArticlesWithCommentCount limit
 const getArticlesWithCommentCount = ({
   limit = 10,
   sort_by = "created_at",
   order = "desc",
   p = 1
 }) => {
-  console.log(limit);
   return connection
     .select(
       { author: "articles.username" },
@@ -101,9 +98,21 @@ const fetchArticleComments = (
 
 const updateArticleComments = ({ inc_votes }, { article_id, comment_id }) => {
   return connection("comment")
-    .where("comment.comment_id", "=", parseInt(comment_id))
     .increment("votes", inc_votes)
+    .where("comment.comment_id", "=", parseInt(comment_id))
     .returning("*");
+};
+
+const deleteArticle = ({ article_id }) => {
+  return connection("articles")
+    .delete("*")
+    .where("article_id", "=", article_id);
+};
+
+const deleteComment = ({ article_id, comment_id }) => {
+  return connection("comment")
+    .delete("*")
+    .where("comment_id", "=", comment_id);
 };
 
 module.exports = {
@@ -112,5 +121,7 @@ module.exports = {
   fetchArticleById,
   patchArticles,
   fetchArticleComments,
-  updateArticleComments
+  updateArticleComments,
+  deleteArticle,
+  deleteComment
 };

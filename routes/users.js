@@ -15,9 +15,4 @@ usersRouter.route("/:username").get(getUserByUsername);
 
 usersRouter.route("/:username/articles").get(getArticlesByUsername);
 
-// usersRouter
-//   .route("/:topic/articles")
-//   .get(sendArticleCount)
-//   .post(postArtilceByTopic);
-
 module.exports = usersRouter;
