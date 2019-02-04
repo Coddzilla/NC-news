@@ -425,7 +425,8 @@ describe("/api", () => {
           });
       });
       describe("/articles/:article_id", () => {
-        it("gets 200 and an article when an article id is specified", () => {
+        //here
+        xit("gets 200 and an article when an article id is specified", () => {
           return request
             .get("/api/articles/2")
             .expect(200)
@@ -631,7 +632,7 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         }); //here
-        it.only("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?p=3")
             .expect(200)

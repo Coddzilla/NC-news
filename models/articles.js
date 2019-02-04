@@ -71,7 +71,7 @@ const patchArticles = ({ article_id }, { inc_votes }) => {
     .increment("votes", inc_votes)
     .returning("*");
 };
-//don't think this is working for p
+//don't think this is working
 const fetchArticleComments = (
   { article_id },
   { limit = 10, sort_by = "created_at", order = "desc", p = 1 }
@@ -92,6 +92,7 @@ const fetchArticleComments = (
       .limit(parseInt(limit))
       .offset((parseInt(p) - 1) * limit)
       .orderBy(sort_by, order)
+    // .returning("*")
   );
 };
 
