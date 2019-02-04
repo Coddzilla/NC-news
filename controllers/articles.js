@@ -67,24 +67,37 @@ const getArticleCommentsByArticleId = (req, res, next) => {
 };
 
 const patchArticleComments = (req, res, next) => {
-  updateArticleComments(req.body, req.params)
-    .then(([comment]) => {
-      return res.status(200).send({ comment });
-    })
-    .catch(err => console.log(err) || next(err));
+  console.log(req.body);
+  console.log(req.params);
+  if (!req.body || !req.body.inc_votes) {
+    return res.status(200).send({ msg: "unmodified" });
+  } else {
+    updateArticleComments(req.body, req.params)
+      .then(([comment]) => {
+        if (!comment || comment === undefined) {
+          return Promise.reject({
+            status: 400,
+            msg: "sorrym that id cannot be found"
+          });
+        }
+        console.log(comment);
+        return res.status(200).send({ comment });
+      })
+      .catch(err => console.log(err) || next(err));
+  }
 };
 
 const deleteArticleByArticleId = (req, res, next) => {
   console.log(req.params);
   deleteArticle(req.params)
-    .then(() => {
+    .then(deleted => {
+      console.log("mysteet", deleted);
       let numRegex = /^[0-9]+$/;
       if (!req.params.article_id || !numRegex.test(req.params.article_id)) {
         res.status(400).send({ msg: "sorry that was in invalid request" });
+      } else if (!deleted || deleted.length === 0) {
+        return Promise.reject({ status: 404, msg: "That was not found" });
       }
-      // else if () {
-
-      // }
       return res.status(204).send();
     })
     .catch(err => console.log(err) || next(err));

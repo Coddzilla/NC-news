@@ -2,8 +2,8 @@ const handle400 = (err, req, res, next) => {
   const codes = {
     "23503": "username not found",
     "42703": "That sort order cannot be implimented",
-    "23502": "null value in column violates not- null constraint",
-    "22P02": 'invalid input syntax for integer: "NaN"'
+    "22P02": 'invalid input syntax for integer: "NaN"',
+    "23502": 'null value in column "body" violates not-null constraint'
   };
   if (codes[err.code] || err.status === 400) {
     res.status(400).send({ msg: "sorry there was a 400, bad request!" });
@@ -13,6 +13,7 @@ const handle400 = (err, req, res, next) => {
 };
 
 const handle404 = (err, req, res, next) => {
+  const codes = {};
   if (err.status === 404 || codes[err.code]) {
     console.log("in the 404 error");
     res.status(404).send({ msg: "sorry, that was not found" });

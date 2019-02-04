@@ -15,9 +15,17 @@ const sendTopics = (req, res, next) => {
 };
 
 const postTopics = (req, res, next) => {
+  console.log(req.body);
   const topic = req.body.topic;
   addTopic(topic)
     .then(([topic]) => {
+      if (!req.body.topic.slug || !req.body.topic.description) {
+        console.log("in the if in controler");
+        return Promise.reject({
+          status: 400,
+          msg: "there are missing arguments"
+        });
+      }
       res.status(201).send({ topic });
     })
     .catch(err => console.log(err) || next(err));

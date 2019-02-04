@@ -64,6 +64,7 @@ describe("/api", () => {
           //how do I make this test better?
         });
     });
+
     it("POST request responds with 400 if a bad post request has been made with no description", () => {
       const topic = {
         slug: "dinosaur"
@@ -257,6 +258,19 @@ describe("/api", () => {
             expect(body.title).to.eql("yoyoyo");
           });
       });
+      //here
+      it("POST - responds with a 400 if the post data is malformed", () => {
+        const article = {
+          title: "yoyoyo"
+        };
+        return request
+          .post("/api/topics/mitch/articles")
+          .send({ article })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.eql("sorry there was a 400, bad request!");
+          });
+      });
       it("POST - responds with a 400 bad request if the username does not exists", () => {
         const article = {
           title: "yoyoyo",
@@ -369,7 +383,7 @@ describe("/api", () => {
             expect(body.articles[0].title).to.eql("Moustache");
           });
       });
-      //should this be a 404?
+      //should this be a 404? here
       it("GETs sends a 400 bad request when the sort column does not exist", () => {
         return request
           .get("/api/articles?sort_by=cdbu")
@@ -497,7 +511,8 @@ describe("/api", () => {
         it("DELETE's an article by article id, status 204'", () => {
           return request.delete("/api/articles/2").expect(204);
         });
-        xit("DELETE status 404 when given a non-existant article_id", () => {
+        //here
+        it("DELETE status 404 when given a non-existant article_id", () => {
           return request.delete("/api/articles/90").expect(404);
         });
         it("DELETE status 400 when given an article_id in the wrong format", () => {
@@ -584,19 +599,33 @@ describe("/api", () => {
         it("PATCH request body accepts an object in the form { inc_votes: newVote } with a status 200 and increments the votes", () => {
           return request
             .patch("/api/articles/1/comments/1")
-            .send({ inc_votes: 4 })
+            .send({
+              inc_votes: 4
+            })
             .expect(200)
             .then(({ body }) => {
               expect(body.comment.votes).to.eql(20);
             });
         });
-        xit("PATCH responds with 400 when the comment id does not exist", () => {
+        //here getting error: Can't set headers after they are sent
+        it("PATCH request body accepts an object in the form { inc_votes: newVote } with a status 200 and increments the votes", () => {
+          return request
+            .patch("/api/articles/1/comments/1")
+            .send({})
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("unmodified");
+            });
+        });
+        it("PATCH responds with 400 when the comment id does not exist", () => {
           return request
             .patch("/api/articles/1/comments/80000")
-            .send({ inc_votes: 4 })
+            .send({
+              inc_votes: 4
+            })
             .expect(400)
             .then(({ body }) => {
-              expect(body.msg).to.eql("");
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         });
         it("DELETEs a comment by comment id, status 204", () => {
