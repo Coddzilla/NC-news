@@ -4,6 +4,18 @@ const request = require("supertest")(app);
 const { expect } = require("chai");
 const connection = require("../connection");
 
+/*
+to do : 
+- make a post for the /api/articles/article_id/comments/comment_id 
+- double check my code is all okay for the comment_id article_id thing .... didn't take into accoutn the article_id
+- ensure all detailed tests are done for all end points and queries... up to /users:
+    - /api/users: Post - missing/duplicate/malformed post data 
+    - /api/users/:username: username not found 
+    - /api/users/:username/articles: username not found, queries 
+    -/api : what errors?
+
+*/
+
 // vote test for if it is a number... /^-?[0-9]+$
 //change all error handles to match the msg in the erro handling function
 describe("/api", () => {
