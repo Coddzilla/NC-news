@@ -15,9 +15,18 @@ const sendUsers = (req, res, next) => {
 };
 
 const postUser = (req, res, next) => {
-  addUser(req.body)
-    .then(([user]) => res.status(201).send({ user }))
-    .catch(err => console.log(err) || next(err));
+  console.log(req.body);
+  if (!req.body.username || !req.body.name || !req.body.avatar_url) {
+    console.log("hello");
+    return Promise.reject({ status: 400, msg: "bad request" });
+  } else {
+    addUser(req.body)
+      .then(([user]) => {
+        console.log({ user });
+        return res.status(201).send({ user });
+      })
+      .catch(err => console.log(err) || next(err));
+  }
 };
 
 const getUserByUsername = (req, res, next) => {

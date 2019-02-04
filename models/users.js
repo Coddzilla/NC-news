@@ -5,6 +5,7 @@ const getUsers = () => {
 };
 
 const addUser = body => {
+  console.log({ body });
   user = body.user;
   return connection
     .insert(user)

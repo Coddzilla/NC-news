@@ -763,7 +763,7 @@ describe("/api", () => {
               );
             });
         });
-        it("POST request - body accepts an object containing a username , avatar_url and a name property responds with the posted user responds with 201", () => {
+        xit("POST request - body accepts an object containing a username , avatar_url and a name property responds with the posted user responds with 201", () => {
           const user = {
             username: "coddzilla",
             name: "lizzie",
@@ -780,6 +780,12 @@ describe("/api", () => {
                 avatar_url: "https://www.yoyoyo.com"
               });
             });
+        });
+        xit("POST request - 400 when the post data is malformed", () => {
+          const user = {
+            username: "coddzilla"
+          };
+          return request.post("/api/users").expect(400);
         });
       });
       describe("/api/users/:username", () => {
