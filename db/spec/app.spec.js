@@ -579,7 +579,7 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         });
-        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?limit=five")
             .expect(400)
@@ -587,7 +587,7 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         });
-        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?sort_by=title")
             .expect(400)
@@ -595,7 +595,7 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         });
-        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?sort_by=hooo")
             .expect(400)
@@ -603,7 +603,7 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         });
-        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?p=hooo")
             .expect(400)
@@ -611,14 +611,14 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         });
-        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?order=hooo")
             .expect(400)
             .then(({ body }) => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
-        });
+        }); //here
         xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?p=3")
@@ -626,7 +626,7 @@ describe("/api", () => {
             .then(({ body }) => {
               expect(body).to.eql("");
             });
-        });
+        }); //here
         xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?order=asc")
@@ -634,7 +634,7 @@ describe("/api", () => {
             .then(({ body }) => {
               expect(body).to.eql("");
             });
-        });
+        }); //here
         xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?sort_by=title")
@@ -642,7 +642,7 @@ describe("/api", () => {
             .then(({ body }) => {
               expect(body).to.eql("");
             });
-        });
+        }); //here
         xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?limit=2")
@@ -762,7 +762,7 @@ describe("/api", () => {
                 "username"
               );
             });
-        });
+        }); //here
         xit("POST request - body accepts an object containing a username , avatar_url and a name property responds with the posted user responds with 201", () => {
           const user = {
             username: "coddzilla",
@@ -780,7 +780,7 @@ describe("/api", () => {
                 avatar_url: "https://www.yoyoyo.com"
               });
             });
-        });
+        }); //here
         xit("POST request - 400 when the post data is malformed", () => {
           const user = {
             username: "coddzilla"
