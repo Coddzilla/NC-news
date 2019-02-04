@@ -400,6 +400,9 @@ describe("/api", () => {
             expect(body.articles).to.have.length(2);
           });
       });
+      it("GETs 400, bad request when the page is a negative number)", () => {
+        return request.get("/api/articles?p=-2").expect(400);
+      });
       //how to deal with how limit is a string in req.params - is it regex?
       it("GETs a total_count property and article array which is split into pages, gives the correct amount of information for each page number when a limit is specified", () => {
         return request
@@ -490,6 +493,15 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         });
+        it("status 400 when the input data is empty", () => {
+          return request
+            .patch("/api/articles/yooo")
+            .send({})
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+            });
+        });
         it("status 200 can decrement the votes and respond with updated article", () => {
           return request
             .patch("/api/articles/3")
@@ -542,20 +554,101 @@ describe("/api", () => {
               expect(body.comments).to.have.length(10);
             });
         });
-        it("GETs the comments for an article with a specific article_id and a specified limit, status 200", () => {
-          return request
-            .get("/api/articles/1/comments?limit=0")
-            .expect(200)
-            .then(({ body }) => {
-              expect(body.comments).to.have.length(0);
-            });
-        });
+
         it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/1/comments")
             .expect(200)
             .then(({ body }) => {
               expect(body.comments[0].author).to.eql("butter_bridge");
+            });
+        }); //
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/one/comments")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+            });
+        }); //
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/90000/comments")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+            });
+        });
+        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/2/comments?limit=five")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+            });
+        });
+        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/2/comments?sort_by=title")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+            });
+        });
+        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/2/comments?sort_by=hooo")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+            });
+        });
+        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/2/comments?p=hooo")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+            });
+        });
+        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/2/comments?order=hooo")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+            });
+        });
+        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/2/comments?p=3")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).to.eql("");
+            });
+        });
+        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/2/comments?order=asc")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).to.eql("");
+            });
+        });
+        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/2/comments?sort_by=title")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).to.eql("");
+            });
+        });
+        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+          return request
+            .get("/api/articles/2/comments?limit=2")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).to.eql("");
             });
         });
         it("GETs the comments for an article with a specific article_id, articles sorted by column when specified (default to sort by date) status 200", () => {
@@ -594,6 +687,17 @@ describe("/api", () => {
               expect(body.comments).to.have.length(2);
             });
         });
+        //here //is this right? looks like there should be a post
+        it("GETs the comments for an article with a specific article_id, and gives the correct amount of responses for a specific page number and a specific limit (limit defaults to 10) status 200", () => {
+          return request
+            .post("/api/articles/1/comments")
+            .expect(405)
+            .then(({ body }) => {
+              expect(body.msg).to.eql(
+                "sorry, that request is not supported at this end point"
+              );
+            });
+        });
       });
       describe("/api/articles/:article_id/comments/:comment_id", () => {
         it("PATCH request body accepts an object in the form { inc_votes: newVote } with a status 200 and increments the votes", () => {
@@ -628,8 +732,22 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         });
+        it("PATCH responds with 400 when the comment id does not exist", () => {
+          return request
+            .patch("/api/articles/1/comments/word")
+            .send({
+              inc_votes: 4
+            })
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+            });
+        });
         it("DELETEs a comment by comment id, status 204", () => {
           return request.delete("/api/articles/2/comments/3").expect(204);
+        });
+        it("DELETE - 400 bad request if comment_id is non-existant", () => {
+          return request.delete("/api/articles/2/comments/3000").expect(400);
         });
       });
       describe("/api/users", () => {

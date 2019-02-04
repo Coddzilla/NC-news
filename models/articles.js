@@ -76,6 +76,7 @@ const fetchArticleComments = (
   { article_id },
   { limit = 10, sort_by = "created_at", order = "desc", p = 1 }
 ) => {
+  console.log("fetch11");
   return (
     connection
       .select(
@@ -111,6 +112,21 @@ const deleteComment = ({ article_id, comment_id }) => {
   return connection("comment")
     .delete("*")
     .where("comment_id", "=", comment_id);
+};
+
+// const postComment = ({ article_id }) => {
+//   return connection
+//     .insert(comment)
+//     .into("articles")
+//     .where("article_id", "=", article_id)
+//     .returning("*");
+// };
+
+const addTopic = postData => {
+  return connection
+    .insert(postData)
+    .into("topics")
+    .returning("*");
 };
 
 module.exports = {

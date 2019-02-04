@@ -6,7 +6,8 @@ const {
   getArticleCommentsByArticleId,
   patchArticleComments,
   deleteArticleByArticleId,
-  deleteCommentByCommentId
+  deleteCommentByCommentId,
+  sendComments
 } = require("../controllers/articles");
 
 const { handle405 } = require("../errorHandling");
@@ -23,7 +24,11 @@ articleRouter
   .delete(deleteArticleByArticleId)
   .all(handle405);
 
-articleRouter.route("/:article_id/comments").get(getArticleCommentsByArticleId);
+articleRouter
+  .route("/:article_id/comments")
+  .get(getArticleCommentsByArticleId)
+  // .post(sendComments) //put here?
+  .all(handle405);
 
 articleRouter
   .route("/:article_id/comments/:comment_id")
