@@ -59,6 +59,7 @@ const updateArticles = (req, res, next) => {
 };
 
 const getArticleCommentsByArticleId = (req, res, next) => {
+  console.log(req.query);
   fetchArticleComments(req.params, req.query, req.body)
     .then(comments => {
       console.log(comments);
@@ -67,7 +68,7 @@ const getArticleCommentsByArticleId = (req, res, next) => {
       }
       res.status(200).send({ comments });
     })
-    .catch(err => console.log(err) || next(err));
+    .catch(err => console.log("ERROR", err) || next(err));
 };
 
 const patchArticleComments = (req, res, next) => {

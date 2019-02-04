@@ -7,7 +7,8 @@ const handle400 = (err, req, res, next) => {
     "2201X": "OFFSET must not be negative"
   };
   if (codes[err.code] || err.status === 400) {
-    res.status(400).send({ msg: "sorry there was a 400, bad request!" });
+    console.log("in the 400 error handler");
+    return res.status(400).send({ msg: "sorry there was a 400, bad request!" });
   } else {
     next(err);
   }

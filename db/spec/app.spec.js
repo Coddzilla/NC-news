@@ -631,7 +631,7 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         }); //here
-        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        it.only("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?p=3")
             .expect(200)
