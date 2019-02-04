@@ -3,8 +3,8 @@ const connection = require("../db/connection");
 const getArticleCount = () => {
   return connection("articles")
     .count("article_id")
-    .then(([{ count }]) => {
-      return +count;
+    .then(([{ comment_count }]) => {
+      return +comment_count;
     });
 };
 const getArticlesWithCommentCount = ({
@@ -23,8 +23,7 @@ const getArticlesWithCommentCount = ({
       "articles.created_at",
       "articles.topic"
     )
-    .count("comment.comment_id")
-    .as("comment_count")
+    .count("comment.comment_id as comment_count")
     .from("articles")
     .leftJoin("comment", "articles.article_id", "comment.article_id")
     .limit(limit)
@@ -45,8 +44,7 @@ const fetchArticleById = ({ article_id }) => {
         "articles.created_at",
         "articles.topic"
       )
-      .count("comment.comment_id")
-      .as("comment_count")
+      .count("comment.comment_id as comment_count")
       .from("articles")
       .leftJoin("comment", "articles.article_id", "comment.article_id")
       .where("articles.article_id", "=", parseInt(article_id))

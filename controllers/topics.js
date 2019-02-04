@@ -1,6 +1,6 @@
 const {
   getTopics,
-  recieveTopics,
+  addTopic,
   getArticlesWithCommentCount,
   getTotalArticleCount,
   recieveArticleByTopic
@@ -15,28 +15,48 @@ const sendTopics = (req, res, next) => {
 };
 
 const postTopics = (req, res, next) => {
-  const postData = req.body;
-  recieveTopics(postData)
+  const topic = req.body.topic;
+  addTopic(topic)
     .then(([topic]) => {
       res.status(201).send({ topic });
     })
     .catch(err => console.log(err) || next(err));
 };
-
+///
 const sendArticleCount = (req, res, next) => {
   Promise.all([
-    getTotalArticleCount(req.query),
-    getArticlesWithCommentCount(req.query)
+    getTotalArticleCount(req.params, req.query),
+    getArticlesWithCommentCount(req.params, req.query)
   ])
     .then(([total_count, articles]) => {
+      console.log(articles);
+      let regex = /^[0-9]+$/;
+      let wordRegex = /^[A-Za-z]+$/;
+      // console.log("articles", articles);
+
+      if (!articles[0] || articles[0] === undefined) {
+        return Promise.reject({
+          status: 404,
+          message: "sorry that was not found!"
+        });
+      } else if (
+        (req.query.limit && !regex.test(req.query.limit)) ||
+        (req.query.p && !regex.test(req.query.p))
+      ) {
+        return Promise.reject({
+          status: 400,
+          msg: "sorry, that was a bad request"
+        });
+      }
       res.send({ total_count, articles });
     })
     .catch(err => console.log(err) || next(err));
 };
 const postArtilceByTopic = (req, res, next) => {
-  const postData = req.body;
+  console.log("req.body", req.body);
+  const article = req.body.article;
   const topic = req.params;
-  recieveArticleByTopic(postData, topic)
+  recieveArticleByTopic(article, topic)
     .then(([article]) => {
       res.status(201).send(article);
     })

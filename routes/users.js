@@ -5,14 +5,22 @@ const {
   getUserByUsername,
   getArticlesByUsername
 } = require("../controllers/users");
+const { handle405 } = require("../errorHandling");
 
 usersRouter
   .route("/")
   .get(sendUsers)
-  .post(postUser);
+  .post(postUser)
+  .all(handle405);
 
-usersRouter.route("/:username").get(getUserByUsername);
+usersRouter
+  .route("/:username")
+  .get(getUserByUsername)
+  .all(handle405);
 
-usersRouter.route("/:username/articles").get(getArticlesByUsername);
+usersRouter
+  .route("/:username/articles")
+  .get(getArticlesByUsername)
+  .all(handle405);
 
 module.exports = usersRouter;

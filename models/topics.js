@@ -7,19 +7,18 @@ const getTopics = () => {
     .returning("*");
 };
 
-const recieveTopics = postData => {
+const addTopic = postData => {
   return connection
     .insert(postData)
     .into("topics")
     .returning("*");
 };
 
-const getArticlesWithCommentCount = ({
-  limit = 10,
-  sort_by = "created_at",
-  order = "desc",
-  p = 1
-}) => {
+const getArticlesWithCommentCount = (
+  { topic },
+  { limit = 10, sort_by = "created_at", order = "desc", p = 1 }
+) => {
+  console.log("in the model");
   return connection
     .select(
       { author: "articles.username" },
@@ -29,9 +28,9 @@ const getArticlesWithCommentCount = ({
       "articles.created_at",
       "articles.topic"
     )
-    .count("comment.comment_id")
-    .as("comment_count")
+    .count("comment.comment_id as comment_count")
     .from("articles")
+    .where("topic", "=", topic)
     .leftJoin("comment", "articles.article_id", "comment.article_id")
     .limit(limit)
     .offset((parseInt(p) - 1) * limit)
@@ -39,9 +38,12 @@ const getArticlesWithCommentCount = ({
     .groupBy("articles.article_id");
 };
 
-const getTotalArticleCount = () => {
+//is this not giving me the article count for mitch?
+const getTotalArticleCount = ({ topic }, {}) => {
+  console.log("topic in model", topic);
   return connection("articles")
     .count("article_id")
+    .where("topic", "=", topic)
     .then(([{ count }]) => {
       return +count;
     });
@@ -58,7 +60,7 @@ const recieveArticleByTopic = (postData, topic) => {
 
 module.exports = {
   getTopics,
-  recieveTopics,
+  addTopic,
   getArticlesWithCommentCount,
   getTotalArticleCount,
   recieveArticleByTopic
