@@ -426,7 +426,7 @@ describe("/api", () => {
       });
       describe("/articles/:article_id", () => {
         //here
-        xit("gets 200 and an article when an article id is specified", () => {
+        it("gets 200 and an article when an article id is specified", () => {
           return request
             .get("/api/articles/2")
             .expect(200)
