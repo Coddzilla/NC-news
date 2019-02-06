@@ -648,20 +648,20 @@ describe("/api", () => {
               expect(body).to.eql("");
             });
         }); //here
-        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
-            .get("/api/articles/2/comments?sort_by=title")
+            .get("/api/articles/1/comments?sort_by=votes")
             .expect(200)
             .then(({ body }) => {
-              expect(body).to.eql("");
+              expect(body.comments[0].votes).to.eql(100);
             });
         }); //here
-        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
-            .get("/api/articles/2/comments?limit=2")
+            .get("/api/articles/1/comments?limit=2")
             .expect(200)
             .then(({ body }) => {
-              expect(body).to.eql("");
+              expect(body.comments[1].votes).to.eql(100);
             });
         });
         it("GETs the comments for an article with a specific article_id, articles sorted by column when specified (default to sort by date) status 200", () => {

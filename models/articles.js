@@ -71,7 +71,11 @@ const patchArticles = ({ article_id }, { inc_votes }) => {
     .increment("votes", inc_votes)
     .returning("*");
 };
+/*
 //don't think this is working
+{ article_id: '2' } { sort_by: 'title' } { }
+
+*/
 const fetchArticleComments = (
   { article_id },
   { limit = 10, sort_by = "created_at", order = "desc", p = 1 }

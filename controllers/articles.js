@@ -59,10 +59,10 @@ const updateArticles = (req, res, next) => {
 };
 
 const getArticleCommentsByArticleId = (req, res, next) => {
-  console.log(req.query);
+  console.log(req.params, req.query, req.body);
   fetchArticleComments(req.params, req.query, req.body)
     .then(comments => {
-      console.log(comments);
+      console.log({ comments });
       if (!comments || comments.length === 0) {
         return Promise.reject({ status: 400, msg: "bad request" });
       }
