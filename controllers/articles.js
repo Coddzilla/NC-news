@@ -64,6 +64,7 @@ const getArticleCommentsByArticleId = (req, res, next) => {
     .then(comments => {
       console.log({ comments });
       if (!comments || comments.length === 0) {
+        console.log("yoooo");
         return Promise.reject({ status: 400, msg: "bad request" });
       }
       res.status(200).send({ comments });

@@ -632,20 +632,20 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         }); //here
-        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
-            .get("/api/articles/2/comments?p=3")
+            .get("/api/articles/1/comments?p=1")
             .expect(200)
             .then(({ body }) => {
-              expect(body).to.eql("");
+              expect(body.comments[0].comment_id).to.eql(2);
             });
         }); //here
-        xit("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
+        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
-            .get("/api/articles/2/comments?order=asc")
+            .get("/api/articles/1/comments?order=asc")
             .expect(200)
             .then(({ body }) => {
-              expect(body).to.eql("");
+              expect(body.comments[0].comment_id).to.eql(18);
             });
         }); //here
         it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
@@ -776,7 +776,7 @@ describe("/api", () => {
               );
             });
         }); //here
-        xit("POST request - body accepts an object containing a username , avatar_url and a name property responds with the posted user responds with 201", () => {
+        it.only("POST request - body accepts an object containing a username , avatar_url and a name property responds with the posted user responds with 201", () => {
           const user = {
             username: "coddzilla",
             name: "lizzie",
@@ -794,7 +794,7 @@ describe("/api", () => {
               });
             });
         }); //here
-        xit("POST request - 400 when the post data is malformed", () => {
+        it("POST request - 400 when the post data is malformed", () => {
           const user = {
             username: "coddzilla"
           };
