@@ -11,16 +11,14 @@ const sendTopics = (req, res, next) => {
     .then(topics => {
       res.status(200).send({ topics });
     })
-    .catch(err => console.log(err) || next(err));
+    .catch(err => next(err));
 };
 
 const postTopics = (req, res, next) => {
-  console.log(req.body);
   const topic = req.body.topic;
   addTopic(topic)
     .then(([topic]) => {
       if (!req.body.topic.slug || !req.body.topic.description) {
-        console.log("in the if in controler");
         return Promise.reject({
           status: 400,
           msg: "there are missing arguments"
@@ -28,7 +26,7 @@ const postTopics = (req, res, next) => {
       }
       res.status(201).send({ topic });
     })
-    .catch(err => console.log(err) || next(err));
+    .catch(err => next(err));
 };
 ///
 const sendArticleCount = (req, res, next) => {
@@ -37,10 +35,8 @@ const sendArticleCount = (req, res, next) => {
     getArticlesWithCommentCount(req.params, req.query)
   ])
     .then(([total_count, articles]) => {
-      console.log(articles);
       let regex = /^[0-9]+$/;
       let wordRegex = /^[A-Za-z]+$/;
-      // console.log("articles", articles);
 
       if (!articles[0] || articles[0] === undefined) {
         return Promise.reject({
@@ -58,17 +54,16 @@ const sendArticleCount = (req, res, next) => {
       }
       res.send({ total_count, articles });
     })
-    .catch(err => console.log(err) || next(err));
+    .catch(err => next(err));
 };
 const postArtilceByTopic = (req, res, next) => {
-  console.log("req.body", req.body);
   const article = req.body.article;
   const topic = req.params;
   recieveArticleByTopic(article, topic)
     .then(([article]) => {
       res.status(201).send(article);
     })
-    .catch(err => console.log(err) || next(err));
+    .catch(err => next(err));
 };
 
 module.exports = {

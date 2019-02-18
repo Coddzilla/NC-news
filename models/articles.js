@@ -80,7 +80,6 @@ const fetchArticleComments = (
   { article_id },
   { limit = 10, sort_by = "created_at", order = "desc", p = 1 }
 ) => {
-  console.log("fetch11");
   return (
     connection
       .select(

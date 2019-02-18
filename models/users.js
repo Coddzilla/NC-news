@@ -5,7 +5,6 @@ const getUsers = () => {
 };
 
 const addUser = body => {
-  console.log({ body });
   user = body.user;
   return connection
     .insert(user)
@@ -33,7 +32,6 @@ const fetchArticlesByUsername = (
   { username },
   { limit = 10, sort_by = "created_at", order = "desc", p = 1 }
 ) => {
-  console.log("here");
   return (
     connection
       .select(

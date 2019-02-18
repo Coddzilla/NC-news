@@ -97,7 +97,6 @@ describe("/api", () => {
           .get("/api/topics/mitch/articles")
           .expect(200)
           .then(({ body }) => {
-            console.log(body);
             expect(body.total_count).to.eql(11);
           });
       });
@@ -776,7 +775,7 @@ describe("/api", () => {
               );
             });
         }); //here
-        it.only("POST request - body accepts an object containing a username , avatar_url and a name property responds with the posted user responds with 201", () => {
+        it("POST request - body accepts an object containing a username , avatar_url and a name property responds with the posted user responds with 201", () => {
           const user = {
             username: "coddzilla",
             name: "lizzie",
@@ -793,12 +792,15 @@ describe("/api", () => {
                 avatar_url: "https://www.yoyoyo.com"
               });
             });
-        }); //here
+        });
         it("POST request - 400 when the post data is malformed", () => {
           const user = {
             username: "coddzilla"
           };
-          return request.post("/api/users").expect(400);
+          return request
+            .post("/api/users")
+            .send({ user })
+            .expect(400);
         });
       });
       describe("/api/users/:username", () => {
@@ -815,7 +817,6 @@ describe("/api", () => {
             .get("/api/users/lizzie")
             .expect(404)
             .then(({ body }) => {
-              console.log(body);
               expect(body.msg).to.eql("sorry, that was not found");
             });
         });

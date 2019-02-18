@@ -7,7 +7,6 @@ const handle400 = (err, req, res, next) => {
     "2201X": "OFFSET must not be negative"
   };
   if (codes[err.code] || err.status === 400) {
-    console.log("in the 400 error handler");
     return res.status(400).send({ msg: "sorry there was a 400, bad request!" });
   } else {
     next(err);
@@ -17,20 +16,17 @@ const handle400 = (err, req, res, next) => {
 const handle404 = (err, req, res, next) => {
   const codes = {};
   if (err.status === 404 || codes[err.code]) {
-    console.log("in the 404 error");
     res.status(404).send({ msg: "sorry, that was not found" });
   } else {
     next(err);
   }
 };
 const handle405 = (req, res, next) => {
-  console.log("in the 405");
   res
     .status(405)
     .send({ msg: "sorry, that request is not supported at this end point" });
 };
 const handle422 = (err, req, res, next) => {
-  console.log("in the 405");
   const codes = {
     "23505": 'duplicate key value violates unique constraint "topics_pkey"'
   };

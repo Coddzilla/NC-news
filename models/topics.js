@@ -18,7 +18,6 @@ const getArticlesWithCommentCount = (
   { topic },
   { limit = 10, sort_by = "created_at", order = "desc", p = 1 }
 ) => {
-  console.log("in the model");
   return connection
     .select(
       { author: "articles.username" },
@@ -40,7 +39,6 @@ const getArticlesWithCommentCount = (
 
 //is this not giving me the article count for mitch?
 const getTotalArticleCount = ({ topic }, {}) => {
-  console.log("topic in model", topic);
   return connection("articles")
     .count("article_id")
     .where("topic", "=", topic)
