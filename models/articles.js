@@ -108,9 +108,8 @@ const postComment = (article_id, comment) => {
   console.log(article_id);
   console.log(comment);
   return connection
-    .insert(comment)
+    .insert({ ...comment, article_id })
     .into("comment")
-    .where("article_id", "=", article_id)
     .returning("*");
 };
 ////

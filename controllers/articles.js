@@ -119,9 +119,9 @@ const deleteCommentByCommentId = (req, res, next) => {
 };
 
 const sendComments = (req, res, next) => {
-  const article_id = req.params;
+  const { article_id } = req.params;
+  console.log(article_id);
   const comment = req.body;
-  // console.log("req.params/body", req.params, req.body);
   postComment(article_id, comment)
     .then(comment => {
       console.log({ comment });
