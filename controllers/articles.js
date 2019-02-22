@@ -137,7 +137,7 @@ const deleteCommentByCommentId = (req, res, next) => {
 module.exports = {
   fetchArticles,
   // postArticle,
-  sendComments,
+  // sendComments,
   getArticleByArticleId,
   updateArticles,
   getArticleCommentsByArticleId,
