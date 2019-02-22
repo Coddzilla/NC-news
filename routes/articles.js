@@ -2,6 +2,7 @@ const articleRouter = require("express").Router();
 const {
   fetchArticles,
   // postArticle,
+  sendComments,
   getArticleByArticleId,
   updateArticles,
   getArticleCommentsByArticleId,
@@ -29,7 +30,7 @@ articleRouter
 articleRouter
   .route("/:article_id/comments")
   .get(getArticleCommentsByArticleId)
-  // .post(sendComments) //put here?
+  .post(sendComments)
   .all(handle405);
 
 articleRouter
