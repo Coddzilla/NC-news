@@ -57,7 +57,7 @@ const sendArticleCount = (req, res, next) => {
     .catch(err => next(err));
 };
 const postArtilceByTopic = (req, res, next) => {
-  const article = req.body.article;
+  const article = req.body;
   const topic = req.params;
   recieveArticleByTopic(article, topic)
     .then(([article]) => {

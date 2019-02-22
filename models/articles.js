@@ -33,37 +33,23 @@ const getArticlesWithCommentCount = ({
 };
 
 const fetchArticleById = ({ article_id }) => {
-  return (
-    connection
-      .select(
-        { author: "articles.username" },
-        "articles.title",
-        "articles.article_id",
-        "articles.body",
-        "articles.votes",
-        "articles.created_at",
-        "articles.topic"
-      )
-      .count("comment.comment_id as comment_count")
-      .from("articles")
-      .leftJoin("comment", "articles.article_id", "comment.article_id")
-      .where("articles.article_id", "=", parseInt(article_id))
-      // ..increment("votes", patchData)
-      .groupBy("articles.article_id")
-  );
-};
+  return connection
+    .select(
+      { author: "articles.username" },
+      "articles.title",
+      "articles.article_id",
+      "articles.body",
+      "articles.votes",
+      "articles.created_at",
+      "articles.topic"
+    )
+    .count("comment.comment_id as comment_count")
+    .from("articles")
+    .leftJoin("comment", "articles.article_id", "comment.article_id")
+    .where("articles.article_id", "=", parseInt(article_id))
 
-// const patchArticles = (article_id, patchData) => {
-//   return connection("articles")
-//     .where("article_id", "=", parseInt(article_id.article_id))
-//     .count("comment.comment_id")
-//     .as("count")
-//     .from("articles")
-//     .leftJoin("comment", "articles.article_id", "comment.article_id")
-//     .groupBy("articles.article_id")
-//     .increment("votes", 2)
-//     .returning("*");
-// };
+    .groupBy("articles.article_id");
+};
 
 const patchArticles = ({ article_id }, { inc_votes }) => {
   return connection("articles")

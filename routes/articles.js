@@ -1,6 +1,7 @@
 const articleRouter = require("express").Router();
 const {
   fetchArticles,
+  // postArticle,
   getArticleByArticleId,
   updateArticles,
   getArticleCommentsByArticleId,
@@ -15,6 +16,7 @@ const { handle405 } = require("../errorHandling");
 articleRouter
   .route("/")
   .get(fetchArticles)
+  // .post(postArticle)
   .all(handle405);
 
 articleRouter

@@ -58,6 +58,7 @@ const updateArticles = (req, res, next) => {
 const getArticleCommentsByArticleId = (req, res, next) => {
   fetchArticleComments(req.params, req.query, req.body)
     .then(comments => {
+      console.log({ comments });
       if (!comments || comments.length === 0) {
         return Promise.reject({ status: 400, msg: "bad request" });
       }
@@ -110,6 +111,8 @@ const deleteCommentByCommentId = (req, res, next) => {
     .catch(err => next(err));
 };
 
+// const postArticle = (req, res, next) => {};
+
 // const sendComments = (req, res, next) => {
 //   console.log("req.params/body", req.params, req.body);
 //   postComment(req.params, req.body)
@@ -122,6 +125,7 @@ const deleteCommentByCommentId = (req, res, next) => {
 
 module.exports = {
   fetchArticles,
+  // postArticle,
   getArticleByArticleId,
   updateArticles,
   getArticleCommentsByArticleId,
