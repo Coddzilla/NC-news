@@ -5,7 +5,10 @@ exports.up = function(connection, Promise) {
       .string("username")
       .references("users.username")
       .notNullable();
-    table.integer("article_id").references("articles.article_id");
+    table
+      .integer("article_id")
+      .references("articles.article_id")
+      .onDelete("cascade");
     table.integer("votes");
     table.dateTime("created_at");
     table.text("body").notNullable();
