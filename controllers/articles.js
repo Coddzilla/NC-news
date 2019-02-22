@@ -89,15 +89,21 @@ const patchArticleComments = (req, res, next) => {
 const deleteArticleByArticleId = (req, res, next) => {
   deleteArticle(req.params)
     .then(deleted => {
+      console.log(deleted);
       let numRegex = /^[0-9]+$/;
       if (!req.params.article_id || !numRegex.test(req.params.article_id)) {
+        console.log("in here");
         res.status(400).send({ msg: "sorry that was in invalid request" });
       } else if (!deleted || deleted.length === 0) {
         return Promise.reject({ status: 404, msg: "That was not found" });
+      } else {
+        return res.status(204).send({});
       }
-      return res.status(204).send({});
     })
-    .catch(err => next(err));
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
 };
 
 const deleteCommentByCommentId = (req, res, next) => {
