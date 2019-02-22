@@ -94,7 +94,7 @@ const updateArticleComments = ({ inc_votes }, { article_id, comment_id }) => {
 
 const deleteArticle = ({ article_id }) => {
   return connection("articles")
-    .delete("*")
+    .del()
     .where("article_id", "=", article_id);
 };
 
