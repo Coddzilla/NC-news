@@ -95,7 +95,7 @@ const deleteArticleByArticleId = (req, res, next) => {
       } else if (!deleted || deleted.length === 0) {
         return Promise.reject({ status: 404, msg: "That was not found" });
       }
-      return res.status(204).send();
+      return res.status(204).send({});
     })
     .catch(err => next(err));
 };
