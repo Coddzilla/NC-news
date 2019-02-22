@@ -7,6 +7,7 @@ exports.up = function(connection, Promise) {
     table
       .string("topic")
       .references("topics.slug")
+      .onDelete("cascade")
       .notNullable();
     table
       .string("username")
