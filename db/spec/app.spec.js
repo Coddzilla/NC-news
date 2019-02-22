@@ -711,6 +711,44 @@ describe("/api", () => {
             });
         });
       });
+
+      describe.only("/api/articles/:article_id/comments", () => {
+        it("posts a comment successfully", () => {
+          const comment = {
+            username: "icellusedkars",
+            body: "oooooh this is a new comment alright"
+          };
+          return request
+            .post("/api/articles/4/comments")
+            .send(comment)
+            .expect(201)
+            .then(({ body }) => {
+              expect(body.comment[0].body).to.eql(
+                "oooooh this is a new comment alright"
+              );
+            });
+        });
+      });
+
+      /*
+ const user = {
+            username: "coddzilla",
+            name: "lizzie",
+            avatar_url: "https://www.yoyoyo.com"
+          };
+          return request
+            .post("/api/users")
+            .send({ user })
+            .expect(201)
+            .then(({ body }) => {
+              expect(body.user).to.eql({
+                username: "coddzilla",
+                name: "lizzie",
+                avatar_url: "https://www.yoyoyo.com"
+              });
+            });
+*/
+
       describe("/api/articles/:article_id/comments/:comment_id", () => {
         it("PATCH request body accepts an object in the form { inc_votes: newVote } with a status 200 and increments the votes", () => {
           return request

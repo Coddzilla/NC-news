@@ -9,8 +9,8 @@ exports.up = function(connection, Promise) {
       .integer("article_id")
       .references("articles.article_id")
       .onDelete("cascade");
-    table.integer("votes");
-    table.dateTime("created_at");
+    table.integer("votes").defaultTo(0);
+    table.dateTime("created_at").defaultTo(connection.fn.now());
     table.text("body").notNullable();
   });
 };

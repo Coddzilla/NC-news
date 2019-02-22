@@ -6,8 +6,8 @@ const {
   fetchArticleComments,
   updateArticleComments,
   deleteArticle,
-  deleteComment
-  // postComment
+  deleteComment,
+  postComment
 } = require("../models/articles");
 
 const { getTotalArticleCount } = require("../models/topics");
@@ -118,26 +118,21 @@ const deleteCommentByCommentId = (req, res, next) => {
     .catch(err => next(err));
 };
 
-// const sendComments = (req,res,next) => {
-//   postNewComment()
-// }
-
-// const postArticle = (req, res, next) => {};
-
-// const sendComments = (req, res, next) => {
-//   console.log("req.params/body", req.params, req.body);
-//   postComment(req.params, req.body)
-//     .then(comment => {
-//       console.log({ comment });
-//       return res.status(200).send({ comment });
-//     })
-//     .catch(err => console.log(err) || next(err));
-// };
+const sendComments = (req, res, next) => {
+  const article_id = req.params;
+  const comment = req.body;
+  // console.log("req.params/body", req.params, req.body);
+  postComment(article_id, comment)
+    .then(comment => {
+      console.log({ comment });
+      return res.status(201).send({ comment });
+    })
+    .catch(err => console.log(err) || next(err));
+};
 
 module.exports = {
   fetchArticles,
-  // postArticle,
-  // sendComments,
+  sendComments,
   getArticleByArticleId,
   updateArticles,
   getArticleCommentsByArticleId,

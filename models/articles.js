@@ -103,16 +103,17 @@ const deleteComment = ({ article_id, comment_id }) => {
     .delete("*")
     .where("comment_id", "=", comment_id);
 };
-
-// const postComment = ({ article_id }) => {
-
-//   return connection
-//     .insert(comment)
-//     .into("articles")
-//     .where("article_id", "=", article_id)
-//     .returning("*");
-// };
-
+//////
+const postComment = (article_id, comment) => {
+  console.log(article_id);
+  console.log(comment);
+  return connection
+    .insert(comment)
+    .into("comment")
+    .where("article_id", "=", article_id)
+    .returning("*");
+};
+////
 const addTopic = postData => {
   return connection
     .insert(postData)
@@ -121,6 +122,7 @@ const addTopic = postData => {
 };
 
 module.exports = {
+  postComment,
   getArticleCount,
   getArticlesWithCommentCount,
   fetchArticleById,
