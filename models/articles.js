@@ -104,13 +104,14 @@ const deleteComment = ({ article_id, comment_id }) => {
     .where("comment_id", "=", comment_id);
 };
 
-const postComment = ({ article_id }) => {
-  return connection
-    .insert(comment)
-    .into("articles")
-    .where("article_id", "=", article_id)
-    .returning("*");
-};
+// const postComment = ({ article_id }) => {
+
+//   return connection
+//     .insert(comment)
+//     .into("articles")
+//     .where("article_id", "=", article_id)
+//     .returning("*");
+// };
 
 const addTopic = postData => {
   return connection
