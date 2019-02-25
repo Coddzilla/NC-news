@@ -15,18 +15,21 @@ const sendTopics = (req, res, next) => {
 };
 
 const postTopics = (req, res, next) => {
-  const topic = req.body.topic;
+  const topic = req.body;
   addTopic(topic)
     .then(([topic]) => {
-      if (!req.body.topic.slug || !req.body.topic.description) {
+      console.log(topic, "lien 21");
+      if (!topic.slug || !topic.description) {
+        console.log("in the 400");
         return Promise.reject({
           status: 400,
           msg: "there are missing arguments"
         });
       }
-      res.status(201).send({ topic });
+      console.log("line 28", topic);
+      res.status(201).send(topic);
     })
-    .catch(err => next(err));
+    .catch(err => console.log(err) || next(err));
 };
 ///
 const sendArticleCount = (req, res, next) => {

@@ -45,18 +45,19 @@ describe("/api", () => {
           expect(body.topics[0]).to.contain.keys("slug", "description");
         });
     });
-    it("POST request responds with 201 and body accepts an object containing a slug and a description ", () => {
+    it.only("POST request responds with 201 and body accepts an object containing a slug and a description ", () => {
       const topic = {
         slug: "lizzie",
         description: "heyheyhey!"
       };
       return request
         .post("/api/topics")
-        .send({ topic })
+        .send(topic)
         .expect(201)
         .then(({ body }) => {
-          expect(body.topic).to.be.an("object");
-          expect(body.topic).to.eql({
+          console.log(body);
+          expect(body).to.be.an("object");
+          expect(body).to.eql({
             slug: "lizzie",
             description: "heyheyhey!"
           });
@@ -712,7 +713,7 @@ describe("/api", () => {
         });
       });
 
-      describe.only("/api/articles/:article_id/comments", () => {
+      describe("/api/articles/:article_id/comments", () => {
         it("posts a comment successfully", () => {
           const comment = {
             username: "icellusedkars",

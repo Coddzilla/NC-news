@@ -39,6 +39,7 @@ const handle422 = (err, req, res, next) => {
   }
 };
 const handle500 = (err, req, res, next) => {
+  console.log(err);
   res
     .status(500)
     .send({ msg: "there was a 500 or another error yet to be accounted for" });
