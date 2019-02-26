@@ -41,7 +41,7 @@ const sendArticleCount = (req, res, next) => {
       let regex = /^[0-9]+$/;
       let wordRegex = /^[A-Za-z]+$/;
 
-      if (!articles[0] || articles[0] === undefined) {
+      if (!articles) {
         return Promise.reject({
           status: 404,
           message: "sorry that was not found!"
