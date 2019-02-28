@@ -9,8 +9,11 @@ exports.up = function(connection, Promise) {
       .integer("article_id")
       .references("articles.article_id")
       .onDelete("cascade");
-    table.integer("votes").defaultTo(0);
-    table.dateTime("created_at").defaultTo(connection.fn.now());
+    table
+      .integer("votes")
+      .defaultTo(0)
+      .notNullable();
+    table.dateTime("created_at").defaultTo(connection.fn.now()).notNullable;
     table.text("body").notNullable();
   });
 };
