@@ -60,7 +60,7 @@ const getArticleCommentsByArticleId = (req, res, next) => {
   fetchArticleComments(req.params, req.query, req.body)
     .then(comments => {
       console.log({ comments });
-      if (!comments || comments.length === 0) {
+      if (!comments) {
         return Promise.reject({ status: 400, msg: "bad request" });
       }
       res.status(200).send({ comments });
@@ -74,12 +74,12 @@ const patchArticleComments = (req, res, next) => {
   } else {
     updateArticleComments(req.body, req.params)
       .then(([comment]) => {
-        // if (comment === undefined) {
-        //   return Promise.reject({
-        //     status: 400,
-        //     msg: "sorry that id cannot be found"
-        //   });
-        // }
+        if (!comment || comment === undefined) {
+          return Promise.reject({
+            status: 400,
+            msg: "sorry that id cannot be found"
+          });
+        }
 
         return res.status(200).send({ comment });
       })
