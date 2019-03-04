@@ -74,10 +74,10 @@ const patchArticleComments = (req, res, next) => {
   } else {
     updateArticleComments(req.body, req.params)
       .then(([comment]) => {
-        if (!comment || comment === undefined) {
+        if (comment === undefined) {
           return Promise.reject({
             status: 400,
-            msg: "sorrym that id cannot be found"
+            msg: "sorry that id cannot be found"
           });
         }
 
