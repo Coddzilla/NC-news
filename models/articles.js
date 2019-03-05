@@ -8,7 +8,7 @@ const getArticleCount = () => {
     });
 };
 const getArticlesWithCommentCount = ({
-  limit = 10,
+  limit = 20,
   sort_by = "created_at",
   order = "desc",
   p = 1
