@@ -45,7 +45,7 @@ describe("/api", () => {
           expect(body.topics[0]).to.contain.keys("slug", "description");
         });
     });
-    it.only("POST request responds with 201 and body accepts an object containing a slug and a description ", () => {
+    it("POST request responds with 201 and body accepts an object containing a slug and a description ", () => {
       const topic = {
         slug: "lizzie",
         description: "heyheyhey!"
