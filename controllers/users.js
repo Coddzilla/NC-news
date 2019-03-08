@@ -51,7 +51,7 @@ const getArticlesByUsername = (req, res, next) => {
     fetchArticlesByUsername(req.params, req.query)
   ])
     .then(([total_count, articles]) => {
-      if (!articles.length) {
+      if (!articles) {
         return Promise.reject({
           status: 404,
           message: "That is not a valid username"
