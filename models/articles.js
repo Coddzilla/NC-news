@@ -9,7 +9,7 @@ const getArticleCount = () => {
 };
 const getArticlesWithCommentCount = ({
   limit = 20,
-  sort_by = "created_at",
+  sort_by = "created_at, title",
   order = "desc",
   p = 1
 }) => {
