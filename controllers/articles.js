@@ -59,7 +59,6 @@ const updateArticles = (req, res, next) => {
 const getArticleCommentsByArticleId = (req, res, next) => {
   fetchArticleComments(req.params, req.query, req.body)
     .then(comments => {
-      console.log({ comments });
       if (!comments) {
         return Promise.reject({ status: 400, msg: "bad request" });
       }
@@ -90,10 +89,8 @@ const patchArticleComments = (req, res, next) => {
 const deleteArticleByArticleId = (req, res, next) => {
   deleteArticle(req.params)
     .then(deleted => {
-      console.log(deleted);
       let numRegex = /^[0-9]+$/;
       if (!req.params.article_id || !numRegex.test(req.params.article_id)) {
-        console.log("in here");
         res.status(400).send({ msg: "sorry that was in invalid request" });
       } else if (!deleted || deleted.length === 0) {
         return Promise.reject({ status: 404, msg: "That was not found" });
@@ -102,7 +99,6 @@ const deleteArticleByArticleId = (req, res, next) => {
       }
     })
     .catch(err => {
-      console.log(err);
       next(err);
     });
 };
@@ -120,11 +116,10 @@ const deleteCommentByCommentId = (req, res, next) => {
 
 const sendComments = (req, res, next) => {
   const { article_id } = req.params;
-  console.log(article_id);
+
   const comment = req.body;
   postComment(article_id, comment)
     .then(comment => {
-      console.log({ comment });
       return res.status(201).send({ comment });
     })
     .catch(err => console.log(err) || next(err));

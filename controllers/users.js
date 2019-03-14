@@ -48,9 +48,11 @@ const getUserByUsername = (req, res, next) => {
 const getArticlesByUsername = (req, res, next) => {
   Promise.all([
     getTotalArticleCount(req.params, req.query),
+    //getUserByUsername and if this is empty check other stuff
     fetchArticlesByUsername(req.params, req.query)
   ])
     .then(([total_count, articles]) => {
+      //how to test if the username is not valid when it's just an empty array.
       if (!articles) {
         return Promise.reject({
           status: 404,

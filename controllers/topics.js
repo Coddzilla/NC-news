@@ -16,17 +16,17 @@ const sendTopics = (req, res, next) => {
 
 const postTopics = (req, res, next) => {
   const topic = req.body;
+  console.log(topic);
   addTopic(topic)
     .then(([topic]) => {
-      console.log(topic, "lien 21");
+      console.log("topic", topic);
       if (!topic.slug || !topic.description) {
-        console.log("in the 400");
         return Promise.reject({
           status: 400,
           msg: "there are missing arguments"
         });
       }
-      console.log("line 28", topic);
+
       res.status(201).send(topic);
     })
     .catch(err => console.log(err) || next(err));

@@ -105,14 +105,12 @@ const deleteComment = ({ article_id, comment_id }) => {
 };
 //////
 const postComment = (article_id, comment) => {
-  console.log(article_id);
-  console.log(comment);
   return connection
     .insert({ ...comment, article_id })
     .into("comment")
     .returning("*");
 };
-////
+
 const addTopic = postData => {
   return connection
     .insert(postData)

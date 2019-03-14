@@ -39,8 +39,8 @@ We can manage our database with incremental changes and store these updates or n
 
 ```js
 const dbConfig = {
-  client: 'pg',
-  connection: { database: 'harry_potter' },
+  client: "pg",
+  connection: { database: "harry_potter" }
 };
 
 module.exports = dbConfig;
@@ -51,21 +51,21 @@ module.exports = dbConfig;
 We also need to point `knex` in the direction of our `seed` and `migration` files, so we could end up with something like this:
 
 ```js
-const ENV = process.env.NODE_ENV || 'development';
+const ENV = process.env.NODE_ENV || "development";
 
 const dbConfig = {
-  client: 'pg',
+  client: "pg",
   migrations: {
-    directory: './db/migrations',
+    directory: "./db/migrations"
   },
   seeds: {
-    directory: './db/seeds',
-  },
+    directory: "./db/seeds"
+  }
 };
 
 const customConfigs = {
-  development: { connection: { database: 'harry_potter' } },
-  test: { connection: 'harry_potter_test' },
+  development: { connection: { database: "harry_potter" } },
+  test: { connection: "harry_potter_test" }
 };
 
 module.exports = { ...baseConfig, ...customConfigs[ENV] };
@@ -149,12 +149,11 @@ Suppose want to create a new table for the actors data: then we can refer to the
 
 ```js
 exports.up = function(knex, Promise) {
-  console.log('creating houses table...');
-  return knex.schema.createTable('houses', (housesTable) => {
-    housesTable.increments('house_id').primary();
-    housesTable.string('house_name').notNullable();
-    housesTable.string('founder').notNullable();
-    housesTable.string('animal');
+  return knex.schema.createTable("houses", housesTable => {
+    housesTable.increments("house_id").primary();
+    housesTable.string("house_name").notNullable();
+    housesTable.string("founder").notNullable();
+    housesTable.string("animal");
   });
 };
 ```
@@ -178,8 +177,7 @@ It is critical that the `down` function contains the commands to undo the creati
 
 ```js
 exports.down = function(knex, Promise) {
-  console.log('removing houses tables...');
-  return knex.schema.dropTable('houses');
+  return knex.schema.dropTable("houses");
 };
 ```
 
@@ -235,13 +233,17 @@ This will run the `down` functions in your migration files in order to undo the 
 - Then, we are free to start inserting data. Think carefully about which data you try to add to the database first.
 
 ```js
-const { houseData, wizardData } = require('../data');
+const { houseData, wizardData } = require("../data");
 
 exports.seed = function(knex, Promise) {
   return knex.migrate
     .rollback()
     .then(() => knex.migrate.latest())
-    .then(() => knex('houses').insert(houseData).returning('*'))
+    .then(() =>
+      knex("houses")
+        .insert(houseData)
+        .returning("*")
+    )
     .then(houseRows => {
       // <-- do rest of the seed logic here ...
     });
@@ -255,20 +257,24 @@ We use `knex('houses').insert(houseData)` to insert the `houseData` into the dat
 The `returning("*")` method that is chained at the end of the insertion means that, should we want to, we can access the rows that have just been added to the database. We can add `.then()` and pass a callback to it in order to work with the newly inserted rows.
 
 ```js
-const { houseData, wizardData } = require('../data');
-const { createRef, formatWizards } = require('../utils');
+const { houseData, wizardData } = require("../data");
+const { createRef, formatWizards } = require("../utils");
 
 exports.seed = function(knex, Promise) {
   return knex.migrate
     .rollback()
     .then(() => knex.migrate.latest())
-    .then(() =>  knex('houses').insert(houseData).returning('*'))
+    .then(() =>
+      knex("houses")
+        .insert(houseData)
+        .returning("*")
+    )
     .then(houseRows => {
-      const houseRef = createRef(houseRows, 'house_name', 'house_id');
+      const houseRef = createRef(houseRows, "house_name", "house_id");
       const formattedWizards = formatWizards(wizardData, houseRef);
-      const wizardInsertions = knex('wizards')
+      const wizardInsertions = knex("wizards")
         .insert(formattedWizards)
-        .returning('*');
+        .returning("*");
       return Promise.all([houseRows, wizardInsertions]);
     });
 };
@@ -303,11 +309,11 @@ Once we have this object then we can iterate over the `wizardData` in order to t
 
 ```js
 exports.formatWizards = (wizardData, houseRef) => {
-  return wizardData.map((wizard) => {
+  return wizardData.map(wizard => {
     const { house, ...restOfWizard } = wizard;
     return {
       house_id: houseRef[house],
-      ...restOfWizard,
+      ...restOfWizard
     };
   });
 };

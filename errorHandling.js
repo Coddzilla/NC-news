@@ -1,7 +1,7 @@
 const handle400 = (err, req, res, next) => {
   const codes = {
     "23503": "username not found",
-    "42703": "That sort order cannot be implimented",
+
     "22P02": 'invalid input syntax for integer: "NaN"',
     "23502": 'null value in column "body" violates not-null constraint',
     "2201X": "OFFSET must not be negative"
@@ -28,7 +28,8 @@ const handle405 = (req, res, next) => {
 };
 const handle422 = (err, req, res, next) => {
   const codes = {
-    "23505": 'duplicate key value violates unique constraint "topics_pkey"'
+    "23505": 'duplicate key value violates unique constraint "topics_pkey"',
+    "42703": "That sort order cannot be implimented"
   };
   if (err.status === 422 || codes[err.code]) {
     res.status(422).send({
@@ -39,7 +40,6 @@ const handle422 = (err, req, res, next) => {
   }
 };
 const handle500 = (err, req, res, next) => {
-  console.log(err);
   res
     .status(500)
     .send({ msg: "there was a 500 or another error yet to be accounted for" });
