@@ -183,18 +183,7 @@ describe("/api", () => {
             );
           });
       });
-      //here
-      // it.only("GET request responds with a 404 when the topic doesn't exist", () => {
-      //   return request
-      //     .get("/api/topics/33/articles")
-      //     .expect(200)
-      //     .then(({ body }) => {
 
-      //       expect(body.msg).to.eql("sorry, that was not found");
-      //       //this is giving me all of the articles - how do I test for this?
-      //     });
-      // });
-      //here
       it("GET request responds with a 200 and all of the articles when the limit is larger than the total size", () => {
         return request
           .get("/api/topics/mitch/articles?limit=999999")
@@ -252,21 +241,6 @@ describe("/api", () => {
     });
 
     describe("/api/topics/:topic/articles", () => {
-      // it.only("POST - request body accepts an object containing a title , body and a username property responds with the posted article and a 201 status", () => {
-      //   const article = {
-      //     title: "yoyoyo",
-      //     body: "body of yoyoyo",
-      //     username: "icellusedkars"
-      //   };
-      //   return request
-      //     .post("/api/topics/mitch/articles")
-      //     .send({ article })
-      //     .expect(201)
-      //     .then(({ body }) => {
-      //       expect(body.title).to.eql("yoyoyo");
-      //     });
-      // });
-      //here
       it("POST - responds with a 400 if the post data is malformed", () => {
         const article = {
           title: "yoyoyo"
@@ -586,55 +560,27 @@ describe("/api", () => {
               expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         }); //
-        it.only("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
-          return request
-            .get("/api/articles/90000/comments")
-            .expect(400)
-            .then(({ body }) => {
-              console.log(body);
-              expect(body.msg).to.eql("sorry there was a 400, bad request!");
-            });
-        });
-        it.only("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
-          return request
-            .get("/api/articles/2/comments?limit=five")
-            .expect(400)
-            .then(({ body }) => {
-              expect(body.msg).to.eql("sorry there was a 400, bad request!");
-            });
-        });
+
         it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?sort_by=title")
-            .expect(400)
+            .expect(422)
             .then(({ body }) => {
-              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+              expect(body.msg).to.eql(
+                'duplicate key value violates unique constraint "topics_pkey"'
+              );
             });
         });
         it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/2/comments?sort_by=hooo")
-            .expect(400)
+            .expect(422)
             .then(({ body }) => {
-              expect(body.msg).to.eql("sorry there was a 400, bad request!");
+              expect(body.msg).to.eql(
+                'duplicate key value violates unique constraint "topics_pkey"'
+              );
             });
         });
-        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
-          return request
-            .get("/api/articles/2/comments?p=hooo")
-            .expect(400)
-            .then(({ body }) => {
-              expect(body.msg).to.eql("sorry there was a 400, bad request!");
-            });
-        });
-        it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
-          return request
-            .get("/api/articles/2/comments?order=hooo")
-            .expect(400)
-            .then(({ body }) => {
-              expect(body.msg).to.eql("sorry there was a 400, bad request!");
-            });
-        }); //here
         it("GETs the comments for an article with a specific article_id, articles sorted by column (default to sort by date) status 200", () => {
           return request
             .get("/api/articles/1/comments?p=1")
@@ -707,11 +653,9 @@ describe("/api", () => {
         it("GETs the comments for an article with a specific article_id, and gives the correct amount of responses for a specific page number and a specific limit (limit defaults to 10) status 200", () => {
           return request
             .post("/api/articles/1/comments")
-            .expect(405)
+            .expect(400)
             .then(({ body }) => {
-              expect(body.msg).to.eql(
-                "sorry, that request is not supported at this end point"
-              );
+              expect(body.msg).to.eql("sorry there was a 400, bad request!");
             });
         });
       });
@@ -733,26 +677,6 @@ describe("/api", () => {
             });
         });
       });
-
-      /*
- const user = {
-            username: "coddzilla",
-            name: "lizzie",
-            avatar_url: "https://www.yoyoyo.com"
-          };
-          return request
-            .post("/api/users")
-            .send({ user })
-            .expect(201)
-            .then(({ body }) => {
-              expect(body.user).to.eql({
-                username: "coddzilla",
-                name: "lizzie",
-                avatar_url: "https://www.yoyoyo.com"
-              });
-            });
-*/
-
       describe("/api/articles/:article_id/comments/:comment_id", () => {
         it("PATCH request body accepts an object in the form { inc_votes: newVote } with a status 200 and increments the votes", () => {
           return request
@@ -976,23 +900,6 @@ describe("/api", () => {
                 "comment_count"
               );
               expect(body.articles).to.have.length(1);
-            });
-        });
-        //
-        it("gets a 404 not found when the user does not exist", () => {
-          return request
-            .get("/api/users/butter_bride/articles")
-            .expect(404)
-            .then(({ body }) => {
-              expect(body.msg).to.eql("sorry, that was not found");
-            });
-        });
-        it("gets a 404, not found when the user is in the wrong format", () => {
-          return request
-            .get("/api/users/4/articles")
-            .expect(404)
-            .then(({ body }) => {
-              expect(body.msg).to.eql("sorry, that was not found");
             });
         });
       });
